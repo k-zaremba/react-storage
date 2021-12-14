@@ -1,0 +1,16 @@
+.history-item{
+    display: flex;
+    margin-left : 10%;
+    margin-right : 10%;
+    margin-bottom : 5px;
+    background-color: white;
+}
+
+.item-name{
+    text-align: left;
+    width: 60%;
+}
+
+.item-count{
+    width: 40%;
+}
