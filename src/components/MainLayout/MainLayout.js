@@ -85,7 +85,7 @@ const MainLayout = () => {
                 <Menu.Item key="3" icon={<UnorderedListOutlined />} onClick={()=>{setOption(3)}} >
                 Historia
                 </Menu.Item>
-                <Menu.Item key="4" icon={<ShoppingCartOutlined />} onClick={()=>{setOption(4); fetchStoreContent()}} >
+                <Menu.Item key="4" icon={<ShoppingCartOutlined />} onClick={()=>{fetchStoreContent(); setOption(4)}} >
                 Sklep
                 </Menu.Item>
                 <Menu.Item key="5" icon={<TeamOutlined />} onClick={()=>{setOption(5)}} >

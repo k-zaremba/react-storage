@@ -64,8 +64,10 @@ const PantryCreation = (props) => {
     const renderPantryLists = () => {
         return (
         <div className='content-bar'>
-            {<PantryList editing={editing} pantryContent={pantryContent.slice(0,Math.ceil(pantryContent.length/2))} ></PantryList>}
-            {<PantryList editing={editing} pantryContent={pantryContent.slice(Math.ceil(pantryContent.length/2))} ></PantryList>}
+            {/*<PantryList editing={editing} pantryContent={pantryContent.slice(0,Math.ceil(pantryContent.length/2))} ></PantryList>}
+            {<PantryList editing={editing} pantryContent={pantryContent.slice(Math.ceil(pantryContent.length/2))} ></PantryList>*/}
+            
+            {<PantryList editing={editing} pantryContent={pantryContent}></PantryList>}
         </div>);
     }
 
@@ -105,7 +107,7 @@ const PantryCreation = (props) => {
         </Space>
         </div>
             {renderPantryLists()}
-    </div>          
+        </div>          
     )
 }
 export default PantryCreation
