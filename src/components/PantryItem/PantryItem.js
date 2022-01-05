@@ -12,6 +12,7 @@ const PantryItem = (props) => {
         setItemInfo((info) => {
             info.count = info.count + 1;
             return info})
+
             // TODO : dynamiczne rerenderowanie wyswietlania liczby obiektuj
     }
 
@@ -27,7 +28,7 @@ const PantryItem = (props) => {
     <div className='pantry-item'>
         <img src={itemInfo.img_url} width={"80px"}></img>
         <div className='pantry-name'>{itemInfo.name}</div>
-            <div style={{fontSize: '20px'}}>{itemInfo.count}</div>
+            <div style={{fontSize: '20px'}}>{count}</div>
 
             {
             !props.editing && 
