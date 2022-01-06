@@ -10,8 +10,6 @@ const StoreList = (props) =>{
     const [shopContent, setShopContent] = useState(props.content)
     const [searchValue, setSearchValue] = useState("")
 
-    console.log(shopContent)
-
     const displayShopContentFiltered = (elems) => {
         
         return elems.filter((elem) => {
@@ -19,7 +17,7 @@ const StoreList = (props) =>{
 
             return elemName.includes(searchValue.toLowerCase())})
             .map((prod) => {
-                return <StoreItem key={prod.id} itemInfo={prod} additionHandler={props.additionHandler}></StoreItem>
+                return <StoreItem forceUpdate={props.forceUpdate} key={prod.id} itemInfo={prod} additionHandler={props.additionHandler}></StoreItem>
         })
     }
 

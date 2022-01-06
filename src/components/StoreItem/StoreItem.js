@@ -8,6 +8,12 @@ const StoreItem = (props) =>{
     const [count, setCount] = useState(0);
     const [itemInfo, setItemInfo] = useState(props.itemInfo);
 
+    const handleAddition = () => {
+        setCount(0); 
+        props.additionHandler(itemInfo, count); 
+        props.forceUpdate();
+    }
+
     return (
         <Space direction='vertical' >
             <img src={itemInfo.imgUrl} width='200px' height='150px'/>
@@ -25,7 +31,7 @@ const StoreItem = (props) =>{
                     <Button type="primary" icon={<PlusOutlined />} onClick={() => {setCount(count + 1)}} size={'small'} />
                 </Space>
                 <div>
-                <Button type="primary" icon={<CheckOutlined />} onClick={() => {setCount(0); props.additionHandler(itemInfo, count)}} size={'small'} />
+                <Button type="primary" icon={<CheckOutlined />} onClick={handleAddition} size={'small'} />
                 </div>
             </div>
         </Space>

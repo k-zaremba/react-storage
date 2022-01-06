@@ -8,12 +8,19 @@ const { Panel } = Collapse;
 
 const HistoryList = (props) =>{
 
-    const [historyListInfo, setHistoryListInfo] = useState(props.historyListInfo);
-
     const displayHistoryListContent = (elems) => {
         return elems.map((prod) => {
-            return <HistoryItem key={prod.name} itemInfo={prod}></HistoryItem>
+            return <HistoryItem forceUpdate={props.forceUpdate} key={prod.name} itemInfo={prod}></HistoryItem>
         })
+    }
+
+    const importList = () => {
+        props.importHandler(props.historyListInfo.content);
+        props.forceUpdate();
+    }
+
+    const deleteList = () =>{
+        props.deletionHandler(props.historyListInfo.name);
     }
     
     return (
@@ -25,11 +32,11 @@ const HistoryList = (props) =>{
                 className="custom-collapse"
                 
             >
-                <Panel header={historyListInfo.name} key="1" className="custom-item-list-panel" >
-                    {displayHistoryListContent(historyListInfo.content)}
+                <Panel header={props.historyListInfo.name} key="1" className="custom-item-list-panel" >
+                    {displayHistoryListContent(props.historyListInfo.content)}
                     <div className="item-inside">
-                        <Button type="primary" shape="round" icon={<ImportOutlined />}>Importuj listę</Button>
-                        <Button type="danger" shape="round" icon={<DeleteOutlined />}></Button>
+                        <Button type="primary" shape="round" onClick={importList} icon={<ImportOutlined />}>Importuj listę</Button>
+                        <Button type="danger" shape="round" onClick={deleteList} icon={<DeleteOutlined />}></Button>
                     </div>
                 </Panel>
             </Collapse>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect, useReducer} from 'react'
 import { Layout, Menu } from 'antd';
 import StoreList from '../StoreList/StoreList'
 import HistoryPanel from '../HistoryPanel/HistoryPanel';
@@ -31,8 +31,16 @@ const MainLayout = () => {
     const [option, setOption] = useState(1);
     const [storeContentFetched, setStoreContentFetched] = useState([]);
     const [shoppingListContent, setShoppingListContent] = useState([]);
+    const [historyContent, setHistoryContent] = useState([]);
     const [pantryContent, setPantryContent] = useState([]);
 
+    
+    const [force, forceUpdate] = useReducer(x => x + 1, 0);
+
+    function update() {
+        console.log('calling force update from MainLayout.update() button.')
+        forceUpdate();
+    }
 
     const toggle = () => {
         setCollapsed(!collapsed);
@@ -65,24 +73,50 @@ const MainLayout = () => {
         return item.name === val
         });
 
-        console.log(index); 
+        var indexInStore = storeContentFetched.findIndex(function(item, i){
+            return item.name === val
+        });
+
+        var url = storeContentFetched[indexInStore].imgUrl
 
         if(index >= 0){
             data[index].count += modCount; 
         }else{
-            data.push({name : modName, count : modCount});
+            data.push({name : modName, count : modCount, img_url : url});
         }
 
         setPantryContent(data)
     }
 
+    const historyListImportHandler = (content) => {
+        var data = shoppingListContent;
+
+        content.forEach(elem => {
+            var idx = data.findIndex(i => i.name === elem.name);
+
+            if (idx != -1) {
+                data[idx].count += elem.count
+            }else{
+                data.push({name: elem.name, count: elem.count})
+            }
+        });
+        
+        console.log(content);
+        setShoppingListContent(data);
+    }
+
+    const historyListDeletionHandler = (name) => {
+        console.log('deletion history called.')
+        setHistoryContent(historyContent.filter((elem) => { return elem.name !== name }))
+    }
+
     const pantryListDeletionHandler = (prod) => {
-        console.log('deletion called.')
+        console.log('deletion pantry called.')
         setPantryContent(pantryContent.filter((elem) => { return elem.name !== prod.name }))
     }
         
     const shoppingListDeletionHandler = (prod) => {
-        console.log('deletion called.')
+        console.log('deletion shopping called.')
         setShoppingListContent(shoppingListContent.filter((elem) => { return elem.name !== prod.name }))
     }
 
@@ -107,21 +141,22 @@ const MainLayout = () => {
 
     const getStore = () => {
         return (
-                <div class="panels">
-                    <div class ="lista" id="content1">
-                        {option===1 && <PantryPanel shopContent={storeContentFetched} pantryContent={pantryContent} additionHandler={pantryListAdditionHandler} deletionHandler={pantryListDeletionHandler}></PantryPanel>}
-                        {option===3 && <HistoryPanel></HistoryPanel>}
-                        {option===4 && <StoreList content={storeContentFetched} additionHandler={shoppingListAdditionHandler}></StoreList>}
-                    </div>
-                    <div class ="lista" id="content2">
-                        <ShoppingList content={shoppingListContent} deletionHandler={shoppingListDeletionHandler}></ShoppingList>
-                    </div>
+            <div class="panels">
+                <div class ="lista" id="content1">
+                    {option===1 && <PantryPanel shopContent={storeContentFetched} pantryContent={pantryContent} additionHandler={pantryListAdditionHandler} deletionHandler={pantryListDeletionHandler}></PantryPanel>}
+                    {option===3 && <HistoryPanel forceUpdate={forceUpdate} historyContent={historyContent} importHandler={historyListImportHandler} deletionHandler={historyListDeletionHandler}></HistoryPanel>}
+                    {option===4 && <StoreList forceUpdate={forceUpdate} content={storeContentFetched} additionHandler={shoppingListAdditionHandler}></StoreList>}
                 </div>
+                <div class ="lista" id="content2">
+                    <ShoppingList content={shoppingListContent} deletionHandler={shoppingListDeletionHandler} force={force}></ShoppingList>
+                </div>
+            </div>
         );
     }
 
     useEffect(() => { // fetch conenet on page load
         fetchStoreContent();
+        console.log(storeContentFetched)
         console.log("mounted. filled.")
 
         setPantryContent([
@@ -136,12 +171,41 @@ const MainLayout = () => {
             {img_url : 'http://www.leclerc.rzeszow.pl/foto_shop/177/5906040063522_T1.jpg', name : "ziemniak", count : 2},
             {img_url : 'https://www.pngall.com/wp-content/uploads/2016/04/Carrot-PNG.png', name : "mleko", count : 6},
             {img_url : 'http://www.leclerc.rzeszow.pl/foto_shop/177/5906040063522_T1.jpg', name : "jogurt naturalny", count : 2}])
+
+            const listaNazwana = {
+                name : "Lista na szybkie śniadanie!",
+                content : [
+                    {name : "bułka", count : 3},
+                    {name : "szynka 200g", count : 2},
+                    {name : "masło", count : 1},
+                    {name : "ketchup", count : 1}]
+                };
+        
+            const listaNienazwana = {
+                name : "Środa 13/12/2021 18:23",
+                content : [
+                    {name : "jajka 1 szt", count : 3},
+                    {name : "szynka 200g", count : 3},
+                    {name : "jogurt naturalny", count : 3}]
+                };
+            
+            const listaNienazwana1 = {
+                    name : "Środa 13/12/2021 18:24",
+                    content : [
+                        {name : "jajka 1 szt", count : 3},
+                        {name : "szynka 200g", count : 1},
+                        {name : "jogurt naturalny", count : 3}]
+                };
+                
+            const historyListsFetched = [listaNazwana, listaNienazwana, listaNienazwana1];
+
+            setHistoryContent(historyListsFetched);
     }, [])
 
     useEffect(() => {
         if(clientState=='logged'){
             console.log('logged from useEffect')
-            // fetch pantry from database if user is normal client
+            // fetch pantry from database if user is normal client and history lists
         }
     }, [clientState])
 

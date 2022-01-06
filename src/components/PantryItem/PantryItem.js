@@ -6,14 +6,13 @@ import { PlusOutlined, MinusOutlined, CloseOutlined} from '@ant-design/icons';
 
 const PantryItem = (props) => {
     const [itemInfo, setItemInfo] = useState(props.itemInfo);
-    const [count, setCount] = useState(props.itemInfo.count);
 
     const incCount = () => {
         setItemInfo((itemInfo) => {
             itemInfo.count = itemInfo.count + 1;
             return itemInfo})
-
-            // TODO : dynamiczne rerenderowanie wyswietlania liczby obiektuj
+            
+        props.forceUpdate();
     }
 
     const decCount = () => {
@@ -23,6 +22,8 @@ const PantryItem = (props) => {
             return itemInfo})
         }
 
+        props.forceUpdate();
+        
         if(itemInfo.count === 0)
             props.deletionHandler(itemInfo);
     }

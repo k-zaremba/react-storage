@@ -15,11 +15,9 @@ const PantryCreation = (props) => {
     const [, forceUpdate] = useReducer(x => x + 1, 0);
 
     function update() {
-        console.log('calling force update. ShoppingList contents are')
+        console.log('calling force update from Dodaj button. shop contents are')
         forceUpdate();
     }
-
-
 
     const setCount = (value) => {
         setModCount(value)
@@ -47,7 +45,7 @@ const PantryCreation = (props) => {
             {/*<PantryList editing={editing} pantryContent={pantryContent.slice(0,Math.ceil(pantryContent.length/2))} ></PantryList>}
             {<PantryList editing={editing} pantryContent={pantryContent.slice(Math.ceil(pantryContent.length/2))} ></PantryList>*/}
             
-            {<PantryList editing={editing} pantryContent={props.pantryContent} deletionHandler={props.deletionHandler}></PantryList>}
+            {<PantryList editing={editing} key={1} pantryContent={props.pantryContent} deletionHandler={props.deletionHandler}></PantryList>}
         </div>);
     }
 
