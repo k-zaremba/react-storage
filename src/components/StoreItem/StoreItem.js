@@ -25,7 +25,7 @@ const StoreItem = (props) =>{
                     <Button type="primary" icon={<PlusOutlined />} onClick={() => {setCount(count + 1)}} size={'small'} />
                 </Space>
                 <div>
-                <Button type="primary" icon={<CheckOutlined />} onClick={() => {setCount(0)}} size={'small'} />
+                <Button type="primary" icon={<CheckOutlined />} onClick={() => {setCount(0); props.additionHandler(itemInfo, count)}} size={'small'} />
                 </div>
             </div>
         </Space>

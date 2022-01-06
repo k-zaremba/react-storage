@@ -9,26 +9,37 @@ const PantryItem = (props) => {
     const [count, setCount] = useState(props.itemInfo.count);
 
     const incCount = () => {
-        setItemInfo((info) => {
-            info.count = info.count + 1;
-            return info})
+        setItemInfo((itemInfo) => {
+            itemInfo.count = itemInfo.count + 1;
+            return itemInfo})
 
             // TODO : dynamiczne rerenderowanie wyswietlania liczby obiektuj
     }
 
     const decCount = () => {
         if(itemInfo.count > 0){
-            setItemInfo((info) => {
-            info.count = info.count - 1;
-            return info})
+            setItemInfo((itemInfo) => {
+                itemInfo.count = itemInfo.count - 1;
+            return itemInfo})
         }
+
+        if(itemInfo.count === 0)
+            props.deletionHandler(itemInfo);
+    }
+
+
+    const resCount = () => {
+        setItemInfo((itemInfo) => {
+            itemInfo.count = 0;
+            return itemInfo})
+        props.deletionHandler(itemInfo);
     }
 
     return(
     <div className='pantry-item'>
         <img src={itemInfo.img_url} width={"80px"}></img>
         <div className='pantry-name'>{itemInfo.name}</div>
-            <div style={{fontSize: '20px'}}>{count}</div>
+            <div style={{fontSize: '20px'}}>{itemInfo.count}</div>
 
             {
             !props.editing && 
@@ -45,7 +56,7 @@ const PantryItem = (props) => {
                     <Button type="ghost" icon={<PlusOutlined />} onClick={() => {incCount()}} size={'small'} />
                 </Space>
                 <div>
-                <Button type="danger" icon={<CloseOutlined />} onClick={() => {setCount(0); console.log(itemInfo); props.deletionHandler(itemInfo)}} size={'small'} />
+                <Button type="danger" icon={<CloseOutlined />} onClick={() => {resCount()}} size={'small'} />
                 </div>
             </div>
             }

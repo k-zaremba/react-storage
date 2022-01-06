@@ -12,7 +12,7 @@ const HistoryList = (props) =>{
 
     const displayHistoryListContent = (elems) => {
         return elems.map((prod) => {
-            return <HistoryItem itemInfo={prod}></HistoryItem>
+            return <HistoryItem key={prod.name} itemInfo={prod}></HistoryItem>
         })
     }
     

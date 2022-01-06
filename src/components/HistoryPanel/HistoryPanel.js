@@ -8,7 +8,7 @@ const HistoryPanel = () =>{
         
     const displayHistoryPanelContent = (elems) => {
         return elems.map((prod) => {
-            return <HistoryList historyListInfo={prod}></HistoryList>
+            return <HistoryList key={prod.name} historyListInfo={prod}></HistoryList>
         })
     }
 

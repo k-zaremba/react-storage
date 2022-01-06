@@ -19,7 +19,7 @@ const StoreList = (props) =>{
 
             return elemName.includes(searchValue.toLowerCase())})
             .map((prod) => {
-                return <StoreItem key={prod.id} itemInfo={prod}></StoreItem>
+                return <StoreItem key={prod.id} itemInfo={prod} additionHandler={props.additionHandler}></StoreItem>
         })
     }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect} from 'react'
 import { Layout, Menu } from 'antd';
 import StoreList from '../StoreList/StoreList'
 import HistoryPanel from '../HistoryPanel/HistoryPanel';
@@ -29,12 +29,62 @@ const MainLayout = () => {
     const [collapsed, setCollapsed] = useState(false);
     const [clientState, setClientState] = useState('logged');
     const [option, setOption] = useState(1);
-    const [shopContentFetched, setShopContentFetched] = useState([]);
+    const [storeContentFetched, setStoreContentFetched] = useState([]);
+    const [shoppingListContent, setShoppingListContent] = useState([]);
+    const [pantryContent, setPantryContent] = useState([]);
 
 
     const toggle = () => {
         setCollapsed(!collapsed);
     };
+
+
+    const shoppingListAdditionHandler = (item, count) => {
+        var content = shoppingListContent;
+        var idx = content.findIndex(i => i.name === item.name);
+
+        if (idx != -1) {
+            content[idx].count += count
+        }else{
+            content.push({name: item.name, count: count})
+        }
+        
+        console.log(content);
+        setShoppingListContent(content);
+    }
+
+    
+    const pantryListAdditionHandler = (modName, modCount) => {
+
+        if(modName == '') return
+
+        var data = pantryContent;
+        var val = modName
+
+        var index = data.findIndex(function(item, i){
+        return item.name === val
+        });
+
+        console.log(index); 
+
+        if(index >= 0){
+            data[index].count += modCount; 
+        }else{
+            data.push({name : modName, count : modCount});
+        }
+
+        setPantryContent(data)
+    }
+
+    const pantryListDeletionHandler = (prod) => {
+        console.log('deletion called.')
+        setPantryContent(pantryContent.filter((elem) => { return elem.name !== prod.name }))
+    }
+        
+    const shoppingListDeletionHandler = (prod) => {
+        console.log('deletion called.')
+        setShoppingListContent(shoppingListContent.filter((elem) => { return elem.name !== prod.name }))
+    }
 
     const fetchStoreContent = () => {
 
@@ -50,7 +100,7 @@ const MainLayout = () => {
             .then(res => res.json())
             .then((res) => {
                 console.log(res)
-                setShopContentFetched(res)
+                setStoreContentFetched(res)
             })
     };
     
@@ -59,16 +109,41 @@ const MainLayout = () => {
         return (
                 <div class="panels">
                     <div class ="lista" id="content1">
-                        {option===1 && <PantryPanel content={shopContentFetched}></PantryPanel>}
+                        {option===1 && <PantryPanel shopContent={storeContentFetched} pantryContent={pantryContent} additionHandler={pantryListAdditionHandler} deletionHandler={pantryListDeletionHandler}></PantryPanel>}
                         {option===3 && <HistoryPanel></HistoryPanel>}
-                        {option===4 && <StoreList content={shopContentFetched}></StoreList>}
+                        {option===4 && <StoreList content={storeContentFetched} additionHandler={shoppingListAdditionHandler}></StoreList>}
                     </div>
                     <div class ="lista" id="content2">
-                        <ShoppingList></ShoppingList>
+                        <ShoppingList content={shoppingListContent} deletionHandler={shoppingListDeletionHandler}></ShoppingList>
                     </div>
                 </div>
         );
     }
+
+    useEffect(() => { // fetch conenet on page load
+        fetchStoreContent();
+        console.log("mounted. filled.")
+
+        setPantryContent([
+            {img_url : 'http://www.leclerc.rzeszow.pl/foto_shop/177/5906040063522_T1.jpg', name : "masło", count : 3},
+            {img_url : 'http://www.leclerc.rzeszow.pl/foto_shop/177/5906040063522_T1.jpg', name : "bułka", count : 2},
+            {img_url : 'https://www.pngall.com/wp-content/uploads/2016/04/Carrot-PNG.png', name : "cebula", count : 2},
+            {img_url : 'https://www.pngall.com/wp-content/uploads/2016/04/Carrot-PNG.png', name : "marchew 250g", count : 2},
+            {img_url : 'https://e-delikatesydwojka.pl//app/uploads/2019/12/szynka_z_kotla.png', name : "szynka 200g", count : 2},
+            {img_url : 'https://e-delikatesydwojka.pl//app/uploads/2019/12/szynka_z_kotla.png', name : "ketchup", count : 2},
+            {img_url : 'http://www.leclerc.rzeszow.pl/foto_shop/177/5906040063522_T1.jpg', name : "ryż biały", count : 2},
+            {img_url : 'https://e-delikatesydwojka.pl//app/uploads/2019/12/szynka_z_kotla.png', name : "sól 1kg", count : 2},
+            {img_url : 'http://www.leclerc.rzeszow.pl/foto_shop/177/5906040063522_T1.jpg', name : "ziemniak", count : 2},
+            {img_url : 'https://www.pngall.com/wp-content/uploads/2016/04/Carrot-PNG.png', name : "mleko", count : 6},
+            {img_url : 'http://www.leclerc.rzeszow.pl/foto_shop/177/5906040063522_T1.jpg', name : "jogurt naturalny", count : 2}])
+    }, [])
+
+    useEffect(() => {
+        if(clientState=='logged'){
+            console.log('logged from useEffect')
+            // fetch pantry from database if user is normal client
+        }
+    }, [clientState])
 
     return(
         <div>
@@ -85,7 +160,7 @@ const MainLayout = () => {
                 <Menu.Item key="3" icon={<UnorderedListOutlined />} onClick={()=>{setOption(3)}} >
                 Historia
                 </Menu.Item>
-                <Menu.Item key="4" icon={<ShoppingCartOutlined />} onClick={()=>{fetchStoreContent(); setOption(4)}} >
+                <Menu.Item key="4" icon={<ShoppingCartOutlined />} onClick={()=>{setOption(4)}} >
                 Sklep
                 </Menu.Item>
                 <Menu.Item key="5" icon={<TeamOutlined />} onClick={()=>{setOption(5)}} >

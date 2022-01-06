@@ -1,28 +1,29 @@
-import React from 'react'
+import React, {useState, useReducer } from 'react'
 import './ShoppingList.css'
 import ListItem from '../ListItem/ListItem';
 
 
-const ShoppingList = () =>{
+const ShoppingList = (props) =>{
+    const [, forceUpdate] = useReducer(x => x + 1, 0);
+
+    function handleClick() {
+        console.log('calling force update. ShoppingList contents are')
+        forceUpdate();
+    }
 
     const displayShoppingListContent = (elems) => {
         return elems.map((prod) => {
-            return <ListItem key={prod.name} itemInfo={prod}></ListItem>
+            console.log('disp shopp list called')
+            return <ListItem key={prod.name} itemInfo={prod} deletionHandler={props.deletionHandler}></ListItem>
         })
     }
 
-    const shoppingList = [
-        {name : "marchew 250g", count : 3},
-        {name : "ziemniak", count : 2},
-        {name : "mleko", count : 6},
-        {name : "jogurt naturalny", count : 3},
-        {name : "jajka 1 szt", count : 2}]
-
     return (
         <div>
+            <button style={{height : '20px'}} onClick={() => {handleClick()}}></button>
             <div className='list-title'>Lista zakupowa</div>
             <div className='shopping-container'>
-                {displayShoppingListContent(shoppingList)}
+                {displayShoppingListContent(props.content)}
             </div>
         </div>
     )
