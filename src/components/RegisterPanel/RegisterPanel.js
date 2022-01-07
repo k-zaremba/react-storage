@@ -133,7 +133,7 @@ const RegisterPanel = (props) =>{
         ]}
         hasFeedback
       >
-        <Input.Password />
+        <Input.Password/>
       </Form.Item>
 
       <Form.Item
@@ -159,11 +159,17 @@ const RegisterPanel = (props) =>{
         <Input.Password />
       </Form.Item>
 
-      <Form.Item {...tailFormItemLayout}>
-        <Button type="primary" htmlType="submit">
-          Register
-        </Button>
-      </Form.Item>
+        <Form.Item {...tailFormItemLayout}>
+          <Button type="primary" htmlType="submit">
+            Zarejestruj
+          </Button>
+          <Button type="ghost" htmlType="submit">
+            
+          </Button>
+          <Button onClick={() => {props.setClientState('logging')}}>
+            Anuluj
+          </Button>
+        </Form.Item>
     </Form>
 
   );

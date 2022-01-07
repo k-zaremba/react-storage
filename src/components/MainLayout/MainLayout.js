@@ -10,7 +10,6 @@ import {
     MenuFoldOutlined,
     UserOutlined,
     VideoCameraOutlined,
-    UploadOutlined,
     ShoppingCartOutlined,
     UnorderedListOutlined,
     LogoutOutlined,
@@ -20,6 +19,10 @@ import ShoppingList from '../ShoppingList/ShoppingList';
 import PantryPanel from '../PantryPanel/PantryPanel';
 import WelcomePanel from '../WelcomePanel/WelcomePanel';
 import RegisterPanel from '../RegisterPanel/RegisterPanel';
+import PaymentPanel from '../PaymentPanel/PaymentPanel';
+import CardPaymentPanel from '../CardPaymentPanel/CardPaymentPanel';
+import CardPaymentConfirmationPanel from '../CardPaymentConfirmationPanel/CardPaymentConfirmationPanel';
+import CashPaymentConfirmationPanel from '../CashPaymentConfirmationPanel/CashPaymentConfirmationPanel';
 
 const { Header, Sider, Content } = Layout;
 
@@ -28,7 +31,7 @@ const MainLayout = () => {
 
     const [collapsed, setCollapsed] = useState(false);
     const [clientState, setClientState] = useState('logged');
-    const [option, setOption] = useState(1);
+    const [option, setOption] = useState(6); // TODO: zmiana na 1
     const [storeContentFetched, setStoreContentFetched] = useState([]);
     const [shoppingListContent, setShoppingListContent] = useState([]);
     const [historyContent, setHistoryContent] = useState([]);
@@ -48,6 +51,8 @@ const MainLayout = () => {
 
 
     const shoppingListAdditionHandler = (item, count) => {
+        if (count === 0) return;
+
         var content = shoppingListContent;
         var idx = content.findIndex(i => i.name === item.name);
 
@@ -141,17 +146,41 @@ const MainLayout = () => {
 
     const getStore = () => {
         return (
-            <div class="panels">
-                <div class ="lista" id="content1">
-                    {option===1 && <PantryPanel shopContent={storeContentFetched} pantryContent={pantryContent} additionHandler={pantryListAdditionHandler} deletionHandler={pantryListDeletionHandler}></PantryPanel>}
-                    {option===3 && <HistoryPanel forceUpdate={forceUpdate} historyContent={historyContent} importHandler={historyListImportHandler} deletionHandler={historyListDeletionHandler}></HistoryPanel>}
-                    {option===4 && <StoreList forceUpdate={forceUpdate} content={storeContentFetched} additionHandler={shoppingListAdditionHandler}></StoreList>}
+                <div class="panels">
+                    <div class ="lista" id="content1">
+                        {option===1 && <PantryPanel shopContent={storeContentFetched} pantryContent={pantryContent} additionHandler={pantryListAdditionHandler} deletionHandler={pantryListDeletionHandler}></PantryPanel>}
+                        {option===3 && <HistoryPanel forceUpdate={forceUpdate} historyContent={historyContent} importHandler={historyListImportHandler} deletionHandler={historyListDeletionHandler}></HistoryPanel>}
+                        {option===4 && <StoreList forceUpdate={forceUpdate} content={storeContentFetched} additionHandler={shoppingListAdditionHandler}></StoreList>}
+                    </div>
+                    <div class ="lista" id="content2">
+                        <ShoppingList content={shoppingListContent} deletionHandler={shoppingListDeletionHandler} force={force} setOption={setOption}></ShoppingList>
+                    </div>
                 </div>
-                <div class ="lista" id="content2">
-                    <ShoppingList content={shoppingListContent} deletionHandler={shoppingListDeletionHandler} force={force}></ShoppingList>
-                </div>
-            </div>
         );
+    }
+
+    const getPayment = () => {
+        return (
+            <PaymentPanel setOption={setOption}></PaymentPanel>
+        )
+    }
+
+    const getCardPayment = () => {
+        return (
+            <CardPaymentPanel setOption={setOption}></CardPaymentPanel>
+        )
+    }
+
+    const getCardConfirmation = () => {
+        return (
+            <CardPaymentConfirmationPanel setOption={setOption}></CardPaymentConfirmationPanel>
+        )
+    }
+
+    const getCashConfirmation = () => {
+        return (
+            <CashPaymentConfirmationPanel setOption={setOption}></CashPaymentConfirmationPanel>
+        )
     }
 
     useEffect(() => { // fetch conenet on page load
@@ -266,10 +295,29 @@ const MainLayout = () => {
                 }
                 
                 {
-                    clientState==='logged' && 
+                    clientState==='logged' && (1 <= option && option <= 5) && 
                     getStore()
                 }
+                
+                {   
+                    clientState==='logged' && option === 6 && 
+                    getPayment()
+                }
 
+                {   
+                clientState==='logged' && option === 7 && 
+                    getCardPayment()
+                }
+
+                {clientState==='logged' && option === 8 && 
+                    getCashConfirmation()
+                }
+
+                {clientState==='logged' && option === 9 && 
+                    getCardConfirmation()
+                }
+
+                
 
             </Content>
             </Layout>

@@ -7,3 +7,15 @@
     font-size: large;
     text-align: center;
 }
+
+.payment{
+    font-size: 28px;
+    height: 100px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+.summary{
+    margin-right: 30px;
+}

@@ -1,6 +1,7 @@
 import React, {useState, useReducer } from 'react'
 import './ShoppingList.css'
 import ListItem from '../ListItem/ListItem';
+import { Button } from 'antd';
 
 
 const ShoppingList = (props) =>{
@@ -18,6 +19,17 @@ const ShoppingList = (props) =>{
             <div className='shopping-container'>
                 {displayShoppingListContent(props.content)}
             </div>
+            
+            {props.content.length > 0 && 
+                <div className='payment'>
+                    <div className='summary'>
+                        {Math.floor(Math.random() * (80 - 20)) + 20} PLN
+                    </div>
+                    <Button type="primary" shape="round" size={'large'} onClick={() => {props.setOption(6)}}>
+                        Płatność
+                    </Button>
+                </div>
+            }
         </div>
     )
 }
