@@ -1,0 +1,56 @@
+#components-layout-demo-custom-trigger-client .trigger {
+    padding: 0 24px;
+    font-size: 25px;
+    line-height: 64px;
+    cursor: pointer;
+    transition: color 0.9s;
+  }
+  
+  #components-layout-demo-custom-trigger-client .trigger:hover {
+    color: #1890ff;
+  }
+
+  #components-layout-demo-custom-trigger-client .logo {
+    height: 32px;
+    margin: 16px;
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  #components-layout-demo-custom-trigger-client .ant-layout-sider-children {
+    /* background: rgba(201, 19, 19, 0.3);  custom sider color*/
+  }
+
+  .site-layout .site-layout-background {
+    background: #fff;
+  }
+
+  .panels{
+    display: flex;
+    align-items: stretch;
+    gap : 30px;
+    height: 100%;
+  }
+  .lista{
+    padding: 30px;
+  }
+
+  #content1{
+    width: 60%;
+    background-color: 	#f0f2f56e;
+  }
+
+  #content2{
+    width: 40%;
+    background-color: 	#f0f2f56e;
+  }
+
+  #client-content-3{
+    width: 100%;
+    background-color: 	#f0f2f56e;
+  }
+
+  #client-content-4{
+    width: 100%;
+    background-color: 	#f0f2f56e;
+    height: 100vh;
+  }

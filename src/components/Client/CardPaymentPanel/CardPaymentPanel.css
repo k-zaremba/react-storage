@@ -1,0 +1,31 @@
+.card-info-entering-title{
+    padding-top: 20px;
+    height: 80px;
+    font-size: 50px;
+    font-weight: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.card-panel-form-wrapper{
+    width: 70%;
+    margin: auto;
+}
+
+.card-panel-form{
+    padding: 30px;
+    width: 100%;
+    margin-left: 40%;
+}
+
+.card-panel-form-names{
+    font-size: 19px;
+    margin: inherit;
+}
+
+.custom-label{
+    font-size: 20px;
+    margin : auto
+}

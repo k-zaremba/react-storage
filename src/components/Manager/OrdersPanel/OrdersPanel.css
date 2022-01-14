@@ -1,0 +1,54 @@
+[data-theme='compact'] .site-collapse-custom-collapse .site-collapse-custom-panel,
+.site-collapse-custom-collapse .site-collapse-custom-panel {
+  margin-bottom: 24px;
+  overflow: hidden;
+  background: #f7f7f7;
+  border: 0px;
+  border-radius: 2px;
+}
+
+.history-lists-holder-man{
+  width: 80%;
+  justify-content: center;
+  margin: auto;
+}
+
+.history-lists-col{
+  padding: 10px;
+}
+
+.wrapper-statistics{
+  width: 40%;
+  margin: auto;
+  padding-right: 2%;
+}
+
+.statistics-card{
+  background-color: #e87040;
+  font-size: 17px;
+  transition: all 1s ease;
+  width: 300px;
+  margin : 30px
+}
+
+.statistics-card:hover{
+  background-color: #f3956a;
+}
+
+.manager-stats-info-entering-title{
+  height: 80px;
+  font-size: 50px;
+  font-weight: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.man-order-panel-content{
+}
+
+.man-order-lists-holder{
+  display: flex;
+  flex-direction: column
+}

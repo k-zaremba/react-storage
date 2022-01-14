@@ -1,0 +1,63 @@
+#components-layout-demo-custom-trigger-admin .trigger {
+  padding: 0 24px;
+  font-size: 25px;
+  line-height: 64px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+#components-layout-demo-custom-trigger-admin .trigger:hover {
+  color: #e84749;
+}
+
+#components-layout-demo-custom-trigger-admin .logo {
+  height: 32px;
+  margin: 16px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+#components-layout-demo-custom-trigger-admin .ant-layout-sider-children {
+  /* background: rgba(201, 19, 19, 0.3);  custom sider color*/
+}
+
+  .site-layout .site-layout-background {
+    background: #fff;
+  }
+
+  .admin-panels{
+    display: flex;
+    align-items: stretch;
+    gap : 30px;
+    height: 100%;
+  }
+  .admin-content-list{
+    padding: 30px;
+  }
+
+  #admin-content-1{
+    width: 100%;
+    background-color: 	#f0f2f56e;
+  }
+
+  .admin-spinner{
+    margin: 20px 0;
+    margin-bottom: 20px;
+    text-align: center;
+    border-radius: 4px;
+  }
+
+  .menu-item-selector{
+    font-size: 17px;    
+  }
+  
+  .test-wrapper-admin.ant-menu > .ant-menu-item:hover,
+  .test-wrapper-admin.ant-menu > .ant-menu-submenu:hover,
+  .test-wrapper-admin.ant-menu > .ant-menu-item-active,
+  .test-wrapper-admin.ant-menu> .ant-menu-submenu-active,
+  .test-wrapper-admin.ant-menu > .ant-menu-item-open,
+  .test-wrapper-admin.ant-menu> .ant-menu-submenu-open,
+  .test-wrapper-admin.ant-menu > .ant-menu-item-selected,
+  .test-wrapper-admin.ant-menu > .ant-menu-submenu-selected {
+  background-color: #a61d24!important;
+}
+

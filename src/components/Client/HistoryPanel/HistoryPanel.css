@@ -1,0 +1,8 @@
+.history-panel-content{
+  padding: 20px;
+}
+
+.history-lists-holder{
+  display: flex;
+  flex-direction: column
+}

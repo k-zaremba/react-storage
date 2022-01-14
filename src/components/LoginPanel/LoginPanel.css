@@ -1,0 +1,30 @@
+.login-form-con{
+    padding: 30px;
+    width: 60%;
+    margin: auto;
+}
+
+.spinner-wrapper {
+    margin: 20px 0;
+    margin-bottom: 20px;
+    text-align: center;
+    border-radius: 4px;
+  }
+
+.login-panel{
+    width: 50%;
+    padding: 30px;
+    margin: auto;
+    background-color: #fefefe;
+    border: 3px solid #f3f3f3;
+    border-radius: 150px;
+}
+
+.login-panel-title{
+    font-size: 30px;
+    text-align: center;
+}
+
+.login-form-button-main{
+    
+}

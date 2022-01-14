@@ -1,0 +1,49 @@
+[data-theme='compact'] .site-collapse-custom-collapse .site-collapse-custom-panel,
+.site-collapse-custom-collapse .site-collapse-custom-panel {
+  margin-bottom: 24px;
+  overflow: hidden;
+  background: #f7f7f7;
+  border: 0px;
+  border-radius: 2px;
+}
+
+.history-lists-holder{
+  display: flex;
+  justify-content: center;
+}
+
+.history-lists-col{
+  padding: 10px;
+}
+
+
+.worker-order-status-completed{
+  width: 200px;
+  text-align: center;
+  background-color: #8fd460;
+  transition: all 1s ease;
+}
+.worker-order-status-completed:hover{
+  background-color: #b2e58b;
+}
+
+
+.worker-order-status-received{
+  width: 200px;
+  text-align: center;
+  background-color: #f3cc62;
+  transition: all 1s ease;
+}
+.worker-order-status-received:hover{
+  background-color: #f8df8b;
+}
+
+.worker-order-status-cancelled{
+  width: 200px;
+  text-align: center;
+  background-color: #f37370;
+  transition: all 1s ease;
+}
+.worker-order-status-cancelled:hover{
+  background-color: #f89f9a;
+}

@@ -1,0 +1,27 @@
+.payment-popup{
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.payment-box-popup{
+    width: fit-content;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.summary-popup{
+    font-weight: 100;
+}
+
+.summary-popup-sum{
+    font-weight: 100;
+    margin-right: 25px;
+}
+
+.payment-amount-popup{
+    font-weight: 100;
+    font-size: 20px;
+    width: fit-content;
+}

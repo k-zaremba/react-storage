@@ -1,0 +1,32 @@
+.payment-title-client{
+    padding-top: 20px;
+    height: 80px;
+    font-size: 50px;
+    font-weight: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.test-wrapper-payment{
+    width: 40%;
+    padding-right: 2%;
+}
+
+.payment-methods-client{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.payment-option{
+    background-color: #8dcff9;
+    font-size: 17px;
+    transition: all 1s ease;
+    width: 300px;
+    margin : 30px
+}
+
+.payment-option:hover{
+    background-color: #b6e3fb;
+}

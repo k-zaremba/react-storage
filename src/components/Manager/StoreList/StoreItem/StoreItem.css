@@ -1,0 +1,42 @@
+.ant-space .ant-space-vertical{
+    background: white;
+    border-radius: 20px;
+    padding: 5px;
+    margin-left: 20px;
+    margin-right: 20px; /* do zmiany jak sie bedzie ustawialo  */
+}
+
+.item-info-man{
+    text-align: center;
+    font-weight: 100;
+    font-size: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.item-count-add{
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 30%;
+}
+
+.item-rating-rated{
+    color : #fadb14;
+    font-size: 17px;
+    font-weight: 700;
+    height: 31.42px;
+}
+
+.editing-price{
+    display : flex;
+    justify-content : center;
+    align-items: center;
+    padding-left : 30%;
+    padding-right : 30%;
+    gap : 5px;
+}
+
+#price-input{
+    font-size: 17px;
+}

@@ -1,0 +1,16 @@
+.order-history-item{
+    display: flex;
+    font-size: 17px;
+    background-color: white
+}
+
+.order-item-name{
+    width: 200px;
+    text-align: left;
+    margin-right: 20px;
+}
+
+.order-item-count{
+    width: 20px;
+    text-align: right;
+}

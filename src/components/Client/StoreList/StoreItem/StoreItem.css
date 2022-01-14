@@ -1,0 +1,40 @@
+.ant-space .ant-space-vertical{
+    background: white;
+    border-radius: 20px;
+    padding: 5px;
+    margin-left: 20px;
+    margin-right: 20px; /* do zmiany jak sie bedzie ustawialo  */
+}
+
+.item-info{
+    text-align: center;
+    font-weight: 600;
+}
+
+.item-count-add{
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 30%;
+}
+
+.item-rating{
+    text-align: center;
+}
+
+.item-rating-rated{
+    color : #fadb14;
+    text-align: center;
+    font-weight: 700;
+}
+
+.shop-prod-t{
+    background-color: #ffffff;
+    font-size: 17px;
+    transition: all 1s ease;
+    width: 250px;
+    margin : 15px
+}
+
+.shop-prod-t:hover{
+}

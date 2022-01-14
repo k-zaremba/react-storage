@@ -1,0 +1,42 @@
+.register-panel-form{
+    padding: 30px;
+    width: 30%;
+    margin-left: 31%;
+}
+
+.confirm-button-admin{
+    width: 50%;
+    margin-left: 25%;
+    background: #e84749; 
+    border-color: #e84749
+}
+
+.confirm-button-admin:hover{
+    background: #f37370; 
+    border-color: #f37370;
+}
+
+.admin-input-area:hover{
+    border-color: #f37370;
+}
+
+.admin-input-area:focus{
+    border-color: #f37370;
+}
+
+.admin-select-area > .ant-select > .ant-select-selector:hover{
+    border-color: #f37370;
+}
+
+.admin-select-area > .ant-select > .ant-select-selector:focus{
+    border-color: #f37370;
+}
+
+
+.admin-input-password-area > .ant-input-password:hover{
+    border-color: #f37370;
+}
+
+.admin-input-password-area > .ant-input-password:focus{
+    border-color: #f37370;
+}

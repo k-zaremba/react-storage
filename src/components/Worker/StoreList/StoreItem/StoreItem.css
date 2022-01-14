@@ -1,0 +1,51 @@
+.ant-space .ant-space-vertical{
+    background: white;
+    border-radius: 20px;
+    padding: 5px;
+    margin-left: 20px;
+    margin-right: 20px; /* do zmiany jak sie bedzie ustawialo  */
+}
+
+.item-info-worker{
+    transition: all 1s ease;
+    text-align: center;
+    font-weight: 100;
+    font-size: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.img-cont{
+    width: fit-content;
+    margin: auto;
+}
+
+.item-count-add{
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 30%;
+}
+
+.item-rating-rated{
+    color : #fadb14;
+    font-size: 17px;
+    font-weight: 700;
+    height: 31.42px;
+}
+
+.product-editing-p{
+    background-color: #ffffff;
+    font-size: 17px;
+    transition: all 1s ease;
+    width: 300px;
+    margin : 30px
+}
+
+.product-editing-p:hover{
+    background-color: #fbfeff;
+}
+
+.product-editing-p:hover .item-info-worker{
+    font-size: 21px;
+}

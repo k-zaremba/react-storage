@@ -1,0 +1,35 @@
+.custom-item-list-panel{
+    background-color: white;
+}
+
+.ant-collapse-content-box{
+    align-items: center;
+}
+
+.item-inside{
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 20px;
+}
+
+.order-list-man{
+    padding: 50px;
+    background-color: rgb(241, 141, 141);
+    font-size: 24px;
+    margin : 40px;
+}
+
+.order-list-top{
+    display: flex;
+    justify-content: space-between;
+}
+
+.order-list-bottom{
+    padding: 40px;
+}
+
+.order-list-info{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}

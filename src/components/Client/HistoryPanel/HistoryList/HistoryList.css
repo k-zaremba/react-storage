@@ -1,0 +1,25 @@
+.custom-item-list-panel{
+    background-color: white;
+}
+
+.ant-collapse-content-box{
+    align-items: center;
+}
+
+.item-inside{
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 20px;
+}
+
+.hist-order-list{
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    transition: all 1s ease;
+
+}
+
+.hist-order-list:hover{
+    background-color: #b6e3fb;
+}

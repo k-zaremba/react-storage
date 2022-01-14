@@ -1,0 +1,8 @@
+.cart-payment-summary{
+    padding : 50px;
+}
+
+.payment-box-summary{
+    display: flex;
+    justify-content: flex-end;
+}

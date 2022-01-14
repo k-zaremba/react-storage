@@ -1,0 +1,31 @@
+.user-buttons{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+#user-input-vals{
+    width: 200px;
+}
+
+.user-info-name{
+    width: 150px;
+    font-weight: 500;
+}
+
+.user-info{
+    display: flex;
+}
+
+.worker-t{
+    background-color: #f37370;
+    font-size: 17px;
+    transition: all 1s ease;
+    width: 300px;
+    margin : 30px
+}
+
+.worker-t:hover{
+    background-color: #f89f9a;
+}
