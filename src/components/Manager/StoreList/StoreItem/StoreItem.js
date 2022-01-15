@@ -22,7 +22,7 @@ const StoreItem = (props) => {
             }
         };
 
-        fetch(`http://localhost:8080/shop/product/delete?productId=${props.itemInfo.id}`, requestOptions)
+        fetch(`http://localhost:8080/storage/product/delete?productId=${props.itemInfo.id}`, requestOptions)
     }
 
     const postChanges = () => {
@@ -38,7 +38,7 @@ const StoreItem = (props) => {
             })
         };
 
-        fetch(`http://localhost:8080/shop/product/edit?productId=${props.itemInfo.id}`, requestOptions)
+        fetch(`http://localhost:8080/storage/product/edit?productId=${props.itemInfo.id}`, requestOptions)
             .then(res => res.json())
             .then((res) => {
                 console.log(res)

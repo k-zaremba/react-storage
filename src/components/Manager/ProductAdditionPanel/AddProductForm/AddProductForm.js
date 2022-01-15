@@ -21,7 +21,7 @@ const AddProductForm = () => {
                 imgUrl: formValues.imgUrl})
         };
 
-        fetch('http://localhost:8080/shop/product/add', requestOptions)
+        fetch('http://localhost:8080/storage/product/add', requestOptions)
             .then(res => res.json())
             .then((res) => {
               console.log(res)

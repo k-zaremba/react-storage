@@ -32,7 +32,7 @@ const MainLayoutAdmin = () => {
             }
         };
 
-        fetch('http://localhost:8080/shop/users', requestOptions)
+        fetch('http://localhost:8080/storage/users', requestOptions)
             .then(res => res.json())
             .then((res) => {
                 console.log(res)

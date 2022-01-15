@@ -1,0 +1,14 @@
+.pantry-panel-content{
+    padding: 20px;
+}
+
+.pantry-list-item{
+    margin-bottom: 20px;
+    background-color: #ffffff;
+    border : 3px solid white;
+    transition: all 1s ease;
+}
+
+.pantry-list-item:hover{
+    border : 3px solid #b6e3fb;
+}

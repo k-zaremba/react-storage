@@ -25,7 +25,7 @@ const OrdersList = (props) => {
             }
         };
 
-        fetch(`http://localhost:8080/shop/order/edit?orderId=${props.orderInfo.order.id}&statusOrder=${statusOrder}&statusPayment=${props.orderInfo.order.statusPayment}`, requestOptions)
+        fetch(`http://localhost:8080/storage/order/edit?orderId=${props.orderInfo.order.id}&statusOrder=${statusOrder}&statusPayment=${props.orderInfo.order.statusPayment}`, requestOptions)
             .then(res => res.json())
             .then((res) => {
                 console.log(res)

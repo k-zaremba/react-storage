@@ -27,7 +27,7 @@ const LoginPanel = () => {
       })
     };
 
-    fetch('http://localhost:8080/shop/user/login', requestOptions)
+    fetch('http://localhost:8080/storage/user/login', requestOptions)
       .then(res => res.json())
       .then((res) => {
         console.log('res from login:')

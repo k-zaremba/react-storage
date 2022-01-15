@@ -63,7 +63,7 @@ const OrdersPanel = (props) => {
             }
         };
 
-        fetch(`http://localhost:8080/shop/order/edit?orderId=${orderId}&statusOrder=${orderStatus}&statusPayment=${orderPayment}`, requestOptions)
+        fetch(`http://localhost:8080/storage/order/edit?orderId=${orderId}&statusOrder=${orderStatus}&statusPayment=${orderPayment}`, requestOptions)
             .then(res => res.json())
             .then((res) => {
                 console.log(res)

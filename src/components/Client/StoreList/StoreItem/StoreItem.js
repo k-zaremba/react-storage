@@ -20,7 +20,7 @@ const StoreItem = (props) => {
             }
         };
 
-        fetch(`http://localhost:8080/shop/product/rate?productId=${itemInfo.id}&rate=${val}`, requestOptions)
+        fetch(`http://localhost:8080/storage/product/rate?productId=${itemInfo.id}&rate=${val}`, requestOptions)
             .then(res => res.json())
             .then((res) => {
                 console.log(res)

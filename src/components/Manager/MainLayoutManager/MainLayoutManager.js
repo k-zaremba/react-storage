@@ -49,7 +49,7 @@ const MainLayoutManager = () => {
             }
         };
 
-        fetch('http://localhost:8080/shop/products', requestOptions)
+        fetch('http://localhost:8080/storage/products', requestOptions)
             .then(res => res.json())
             .then((res) => {
                 console.log(res)
@@ -69,7 +69,7 @@ const MainLayoutManager = () => {
             }
         };
 
-        fetch('http://localhost:8080/shop/statistics', requestOptions1)
+        fetch('http://localhost:8080/storage/statistics', requestOptions1)
             .then(res => res.json())
             .then((res) => {
                 console.log(res)
@@ -84,7 +84,7 @@ const MainLayoutManager = () => {
             }
         };
 
-        fetch('http://localhost:8080/shop/order/list', requestOptions2)
+        fetch('http://localhost:8080/storage/order/list', requestOptions2)
             .then(res => res.json())
             .then((res) => {
                 console.log(res)

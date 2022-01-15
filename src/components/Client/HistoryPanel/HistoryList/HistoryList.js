@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import './HistoryList.css'
-import { CaretRightOutlined, ShoppingOutlined } from '@ant-design/icons';
+import { ShoppingOutlined } from '@ant-design/icons';
 import { Collapse } from 'antd';
 import { PageHeader, Tag, Button, Statistic, Descriptions, Row, Popover } from 'antd';
 import HistoryItem from '../HistoryItem/HistoryItem';

@@ -71,7 +71,7 @@ const CartPanel = (props) => {
         var item = sessionStorage.getItem('user')
         var user = item ? JSON.parse(item) : {}
 
-        fetch(`http://localhost:8080/shop/order/register?clientId=${user.client.id}`, requestOptions)
+        fetch(`http://localhost:8080/storage/order/register?clientId=${user.client.id}`, requestOptions)
             .then(res => res.json())
             .then((res) => {
                 console.log(res)

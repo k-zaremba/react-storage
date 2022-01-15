@@ -43,7 +43,7 @@ const MainLayoutWorker = () => {
             }
         };
 
-        fetch('http://localhost:8080/shop/products', requestOptions)
+        fetch('http://localhost:8080/storage/products', requestOptions)
             .then(res => res.json())
             .then((res) => {
                 console.log(res)
@@ -62,7 +62,7 @@ const MainLayoutWorker = () => {
             }
         };
 
-        fetch('http://localhost:8080/shop/order/list', requestOptions)
+        fetch('http://localhost:8080/storage/order/list', requestOptions)
             .then(res => res.json())
             .then((res) => {
                 console.log(res)

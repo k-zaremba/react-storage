@@ -35,7 +35,7 @@ const UserClientItem = (props) => {
             }
         };
 
-        fetch(`http://localhost:8080/shop/user/delete?userId=${props.userInfo.id}`, requestOptions)
+        fetch(`http://localhost:8080/storage/user/delete?userId=${props.userInfo.id}`, requestOptions)
     }
 
     const postChanges = () => {
@@ -58,7 +58,7 @@ const UserClientItem = (props) => {
             })
         };
 
-        fetch(`http://localhost:8080/shop/user/edit/${props.userInfo.id}`, requestOptions)
+        fetch(`http://localhost:8080/storage/user/edit/${props.userInfo.id}`, requestOptions)
             .then(res => res.json())
             .then((res) => {
                 console.log(res)

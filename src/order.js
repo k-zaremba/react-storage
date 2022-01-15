@@ -15,7 +15,7 @@ class Order {
             }
         };
 
-        fetch(`http://localhost:8080/shop/order/edit?orderId=${orderId}&statusOrder=cancelled&statusPayment=pending`, requestOptions)
+        fetch(`http://localhost:8080/storage/order/edit?orderId=${orderId}&statusOrder=cancelled&statusPayment=pending`, requestOptions)
             .then(res => res.json())
             .then((res) => {
                 console.log(res)

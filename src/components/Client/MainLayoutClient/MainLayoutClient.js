@@ -2,6 +2,7 @@ import React, { useState, useEffect, useReducer } from 'react'
 import { Layout, Menu, Spin, Popover, Button, Badge } from 'antd';
 import StoreList from '../StoreList/StoreList'
 import HistoryPanel from '../HistoryPanel/HistoryPanel';
+import PantryPanel from '../PatryPanel/PantryPanel'
 import auth from '../../../auth.js'
 import cart from '../../../cart';
 
@@ -14,7 +15,10 @@ import {
     UnorderedListOutlined,
     FieldTimeOutlined,
     LogoutOutlined,
-    ShoppingOutlined
+    ShoppingOutlined,
+    DatabaseOutlined, // spizarnia 
+    ReadOutlined, // listy uzytkownikow
+    ProfileOutlined // lista zakupowa
 } from '@ant-design/icons';
 import PaymentPanel from '../PaymentPanel/PaymentPanel';
 import CardPaymentPanel from '../CardPaymentPanel/CardPaymentPanel';
@@ -32,10 +36,12 @@ const { Header, Sider, Content } = Layout;
 const MainLayoutClient = () => {
 
     const [collapsed, setCollapsed] = useState(false);
-    const [activeWindow, setActiveWindow] = useState(1);
+    const [activeWindow, setActiveWindow] = useState(9);
     const [fetched, setFetched] = useState(false);
     const [storeContentFetched, setStoreContentFetched] = useState([]);
     const [ordersListFetched, setOrdersListFetched] = useState([]);
+    const [pantryFetched, setPantryFetched] = useState([]);
+
 
     const navigate = useNavigate()
     const [force, forceUpdate] = useReducer(x => x + 1, 0);
@@ -74,7 +80,7 @@ const MainLayoutClient = () => {
         return 0
     }
 
-    const filterOrdersCompleted = (statusList) => {
+    const filterOrders = (statusList) => {
         var content = ordersListFetched.filter((e) => { return statusList.includes(e.order.statusOrder) })
         return content.sort(compare)
     }
@@ -89,7 +95,7 @@ const MainLayoutClient = () => {
             }
         };
 
-        fetch('http://localhost:8080/shop/products', requestOptions)
+        fetch('http://localhost:8080/storage/products', requestOptions)
             .then(res => res.json())
             .then((res) => {
                 console.log(res)
@@ -110,7 +116,7 @@ const MainLayoutClient = () => {
                 'Accept': 'application/json'
             }
         };
-        fetch(`http://localhost:8080/shop/orders/history/${user.client.id}`, requestOptions)
+        fetch(`http://localhost:8080/storage/orders/history/${user.client.id}`, requestOptions)
             .then(res => res.json())
             .then((res) => {
                 console.log(res)
@@ -119,11 +125,34 @@ const MainLayoutClient = () => {
             })
     };
 
+    const fetchPantry = () => {
+        var item = sessionStorage.getItem('user')
+        var user = item ? JSON.parse(item) : {}
+
+        setFetched(false)
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        };
+        fetch(`http://localhost:8080/storage/pantry/${user.client.id}`, requestOptions)
+            .then(res => res.json())
+            .then((res) => {
+                console.log(res)
+                setPantryFetched(res)
+                setFetched(true)
+            })
+    };
+
     useEffect(() => {
         order.cancelActive()
 
-        if (activeWindow === 1)
+        if (activeWindow === 1 || activeWindow === 9){
             fetchStoreContent();
+            fetchPantry();
+        }
 
         if (activeWindow === 2 || activeWindow === 3)
             fetchUserOrders();
@@ -157,14 +186,15 @@ const MainLayoutClient = () => {
 
                 }
 
-                {fetched && <div id="client-content-3" class="client-panels">
+                {fetched && <div id="client-content-3" class="client-panels"> {/* background height dynamic */}
                     {activeWindow === 1 && <StoreList force={forceStore} forceShoppingList={forceShoppingList} forceStoreUpdate={forceStoreUpdate} forceShoppingListUpdate={forceShoppingListUpdate} content={storeContentFetched}></StoreList>}
-                    {activeWindow === 2 && <HistoryPanel forceUpdate={forceUpdate} content={filterOrdersCompleted(['completed', 'placed'])}></HistoryPanel>}
-                    {activeWindow === 3 && <HistoryPanel forceUpdate={forceUpdate} content={filterOrdersCompleted(['received'])}></HistoryPanel>}
+                    {activeWindow === 2 && <HistoryPanel forceUpdate={forceUpdate} content={filterOrders(['completed', 'placed'])}></HistoryPanel>}
+                    {activeWindow === 3 && <HistoryPanel forceUpdate={forceUpdate} content={filterOrders(['received'])}></HistoryPanel>}
                     {activeWindow === 8 && <CartPanel setActiveWindow={setActiveWindow} force={forceShoppingList} forceStoreUpdate={forceStoreUpdate} forceShoppingListUpdate={forceShoppingListUpdate}></CartPanel>}
+                    {activeWindow === 9 && <PantryPanel forceUpdate={forceUpdate} pantry={pantryFetched} content={storeContentFetched}></PantryPanel>}
                 </div>}
 
-                {fetched && <div id="client-content-4" class="client-panels">
+                {fetched && <div id="client-content-4" class="client-panels"> {/* background height fiexd */}
                     {activeWindow === 4 && <PaymentPanel setActiveWindow={setActiveWindow}></PaymentPanel>}
                     {activeWindow === 5 && <CardPaymentPanel setActiveWindow={setActiveWindow}></CardPaymentPanel>}
                     {activeWindow === 6 && <CardPaymentConfirmationPanel setActiveWindow={setActiveWindow}></CardPaymentConfirmationPanel>}
@@ -186,7 +216,11 @@ const MainLayoutClient = () => {
 
                 <Sider style={{ position: 'fixed' }} className="sider-menu" trigger={null} collapsible collapsed={collapsed}>
                     <div className="logo" />
-                    <Menu className='test-wrapper-client' theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+                    <Menu className='test-wrapper-client' theme="dark" mode="inline" defaultSelectedKeys={['5']}>
+                        <Menu.Item className="menu-item-selector" key="5" icon={<DatabaseOutlined style={{ fontSize: '20px' }} />} onClick={() => { setActiveWindow(9); forceUpdate() }} >
+                            Spiżarnia
+                        </Menu.Item>
+
                         <Menu.Item className="menu-item-selector" key="1" icon={<ShoppingOutlined style={{ fontSize: '20px' }} />} onClick={() => { setActiveWindow(1); forceUpdate() }} >
                             Sklep
                         </Menu.Item>
@@ -233,8 +267,8 @@ const MainLayoutClient = () => {
                                 onVisibleChange={handleClickChange}
                                 placement="bottomRight"
                             >
-                                <Badge count={cart.getListProductsAmount()} overflowCount={99} style={{marginTop : 45, marginRight : 15}}>
-                                    <ShoppingCartOutlined style={{ fontSize: 40 }} className='trigger' />
+                                <Badge count={cart.getListProductsAmount()} overflowCount={99} style={{marginTop : 45, marginRight : 25}}>
+                                    <ProfileOutlined style={{ fontSize: 40 }} className='trigger' />
                                 </Badge>
                             </Popover>
                         </Popover>

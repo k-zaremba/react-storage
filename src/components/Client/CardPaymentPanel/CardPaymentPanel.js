@@ -52,7 +52,7 @@ const CardPaymentPanel = (props) => {
       }
     };
 
-    fetch(`http://localhost:8080/shop/order/edit?orderId=${orderId}&statusOrder=placed&statusPayment=paid`, requestOptions)
+    fetch(`http://localhost:8080/storage/order/edit?orderId=${orderId}&statusOrder=placed&statusPayment=paid`, requestOptions)
       .then(res => res.json())
       .then((res) => {
         console.log(res)

@@ -57,7 +57,7 @@ const AddUserForm = () => {
       })
     };
 
-    fetch('http://localhost:8080/shop/user/register', requestOptions)
+    fetch('http://localhost:8080/storage/user/register', requestOptions)
       .then(res => res.json())
       .then((res) => {
         console.log(res)
