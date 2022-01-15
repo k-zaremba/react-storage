@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import './HistoryItem.css'
+import './OrderItem.css'
 import { Divider } from 'antd';
 
-const HistoryItem = (props) =>{
+const OrderItem = (props) =>{
 
     return (
         <>
@@ -15,4 +15,4 @@ const HistoryItem = (props) =>{
     )
 }
 
-export default HistoryItem
+export default OrderItem

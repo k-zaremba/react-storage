@@ -5,8 +5,9 @@ import { PageHeader, Statistic, Row, Input, Space } from 'antd';
 import { Button, InputNumber, Select } from 'antd';
 import { PlusOutlined, MinusOutlined, CloseOutlined } from '@ant-design/icons';
 
-import { RadarChartOutlined } from '@ant-design/icons';
-import { UpCircleFilled } from '@ant-design/icons';
+import { EditOutlined, CheckOutlined } from '@ant-design/icons';
+import { UpCircleFilled ,} from '@ant-design/icons';
+import PantryItem from './PantryItem/PantryItem';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -19,14 +20,10 @@ const PantryPanel = (props) => {
     const [editing, setEditing] = useState(false);
 
     const addToPantry = (itemId, quantity) => {
-        console.log(itemId)
-        console.log(quantity)
         if (quantity == 0) return;
 
         var item = sessionStorage.getItem('user')
         var user = item ? JSON.parse(item) : {}
-
-        console.log(user.client.id)
 
         const requestOptions = {
             method: 'POST',
@@ -63,6 +60,8 @@ const PantryPanel = (props) => {
     }
 
     const getProdId = (itemName) => {
+        if(itemName == '') return -1;
+
         var content = props.content;
         var idx = content.findIndex(i => i.name === itemName);
         return content[idx].id
@@ -70,7 +69,9 @@ const PantryPanel = (props) => {
 
     const handleClick = () => {
         console.log(modName, modCount)
-        addToPantry(getProdId(modName), modCount)
+        var id = getProdId(modName)
+        if(id == -1) return;
+        addToPantry(id, modCount)
         props.forceUpdate();
     }
 
@@ -80,47 +81,20 @@ const PantryPanel = (props) => {
 
             return elemName.includes(searchValue.toLowerCase())
         }).map((pair) => {
-            return <><div className='pantry-list-item'>
-                <PageHeader style={{ width: '500px' }}
-                    onBack={() => { }}
-                    backIcon={<RadarChartOutlined />}
-                >
+            return <PantryItem forceUpdate={props.forceUpdate} addToPantry={addToPantry} isEdited={isEdited} pair={pair}></PantryItem>})
+    }
 
-                    <Row style={{ justifyContent: 'space-evenly' }}>
-                        <img src={pair.product.imgUrl} width='140px' height='120px' />
-                        {!isEdited && <div>
-                            <Statistic
-                            title="Nazwa produktu"
-                            value={pair.product.name}
-                            style={{
-                                margin: '0 10px',
-                            }}
-                            />
-                            <Statistic style={{
-                                margin: '0 10px',
-                            }} title="Ilość w spiżarni" value={pair.quantity} />
+    
+    function compare(a, b) {
+        if (a.product.id < b.product.id)
+            return -1
+        if (a.product.id > b.product.id)
+            return 1
+        return 0
+    }
 
-                        </div>}
-                        {isEdited && <div style={{margin: '0 10px'}}>
-                            <p style={{marginBottom : 4, color : 'rgba(0,0,0,0.45)', fontSize : '14px'}}> Nazwa produktu </p>
-                            <p style={{marginBottom : 0, color : 'rgba(0,0,0,0.85)', fontSize : '24px'}}> {pair.product.name} </p>
-                            <p style={{marginBottom : 4, color : 'rgba(0,0,0,0.45)', fontSize : '14px'}}> Ilość w spiżarni </p>
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <Space size="middle">
-                                    <p style={{ marginBottom: 0, color: 'rgba(0,0,0,0.85)', fontSize: '24px' }}> {pair.quantity} </p>
-                                    <Button style={{ border: 'none' }} icon={<MinusOutlined />} />
-                                    <Button style={{ border: 'none' }} icon={<PlusOutlined />} />
-                                    <Button type='danger' style={{ border: 'none', background: 'white', color: 'red', boxShadow: '0 2px 0 rgb(0 0 0 / 2%)' }} icon={<CloseOutlined />} />
-                                </Space>
-
-                            </div>
-                        </div>}
-                    </Row>
-                    <Divider />
-                </PageHeader>
-            </div>
-            </>
-        })
+    const sortProductsById = (arr) => {
+        return arr.sort(compare)
     }
 
     return (
@@ -173,7 +147,7 @@ const PantryPanel = (props) => {
             </div>
             <div className='pantry-panel-content'>
                 <Space direction='horizontal' wrap style={{ justifyContent: 'center', gap: '25px', marginTop: '20px' }}>
-                    {displayPantryContent(props.pantry, editing)}
+                    {displayPantryContent(sortProductsById(props.pantry), editing)}
                 </Space>
             </div>
             <BackTop>

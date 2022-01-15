@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import { Layout, Menu, Spin, Popover, Button, Badge } from 'antd';
 import StoreList from '../StoreList/StoreList'
-import HistoryPanel from '../HistoryPanel/HistoryPanel';
+import OrdersPanel from '../OrdersPanel/OrdersPanel';
 import PantryPanel from '../PatryPanel/PantryPanel'
 import auth from '../../../auth.js'
 import cart from '../../../cart';
@@ -29,6 +29,8 @@ import order from '../../../order';
 import CartClick from './CartClick/CartClick';
 import CartPopup from './CartPopup/CartPopup';
 import CartPanel from '../CartPanel/CartPanel';
+import SharedPanel from '../SharedPanel/SharedPanel';
+import SavedListsPanel from '../SavedListsPanel/SavedListsPanel';
 
 const { Header, Sider, Content } = Layout;
 
@@ -149,8 +151,11 @@ const MainLayoutClient = () => {
     useEffect(() => {
         order.cancelActive()
 
-        if (activeWindow === 1 || activeWindow === 9){
+        if (storeContentFetched === [] || activeWindow === 1){
             fetchStoreContent();
+        }
+
+        if(activeWindow === 9){
             fetchPantry();
         }
 
@@ -188,10 +193,13 @@ const MainLayoutClient = () => {
 
                 {fetched && <div id="client-content-3" class="client-panels"> {/* background height dynamic */}
                     {activeWindow === 1 && <StoreList force={forceStore} forceShoppingList={forceShoppingList} forceStoreUpdate={forceStoreUpdate} forceShoppingListUpdate={forceShoppingListUpdate} content={storeContentFetched}></StoreList>}
-                    {activeWindow === 2 && <HistoryPanel forceUpdate={forceUpdate} content={filterOrders(['completed', 'placed'])}></HistoryPanel>}
-                    {activeWindow === 3 && <HistoryPanel forceUpdate={forceUpdate} content={filterOrders(['received'])}></HistoryPanel>}
+                    {activeWindow === 2 && <OrdersPanel forceUpdate={forceUpdate} content={filterOrders(['completed', 'placed'])}></OrdersPanel>}
+                    {activeWindow === 3 && <OrdersPanel forceUpdate={forceUpdate} content={filterOrders(['received'])}></OrdersPanel>}
                     {activeWindow === 8 && <CartPanel setActiveWindow={setActiveWindow} force={forceShoppingList} forceStoreUpdate={forceStoreUpdate} forceShoppingListUpdate={forceShoppingListUpdate}></CartPanel>}
                     {activeWindow === 9 && <PantryPanel forceUpdate={forceUpdate} pantry={pantryFetched} content={storeContentFetched}></PantryPanel>}
+                    {activeWindow === 10 && <SharedPanel></SharedPanel>}
+                    {activeWindow === 11 && <SavedListsPanel></SavedListsPanel>}
+
                 </div>}
 
                 {fetched && <div id="client-content-4" class="client-panels"> {/* background height fiexd */}
@@ -219,6 +227,14 @@ const MainLayoutClient = () => {
                     <Menu className='test-wrapper-client' theme="dark" mode="inline" defaultSelectedKeys={['5']}>
                         <Menu.Item className="menu-item-selector" key="5" icon={<DatabaseOutlined style={{ fontSize: '20px' }} />} onClick={() => { setActiveWindow(9); forceUpdate() }} >
                             Spiżarnia
+                        </Menu.Item>
+
+                        <Menu.Item className="menu-item-selector" key="6" icon={<ReadOutlined style={{ fontSize: '20px' }} />} onClick={() => { setActiveWindow(10); forceUpdate() }} >
+                            Propozycje
+                        </Menu.Item>
+
+                        <Menu.Item className="menu-item-selector" key="7" icon={<DatabaseOutlined style={{ fontSize: '20px' }} />} onClick={() => { setActiveWindow(11); forceUpdate() }} >
+                            Twoje listy
                         </Menu.Item>
 
                         <Menu.Item className="menu-item-selector" key="1" icon={<ShoppingOutlined style={{ fontSize: '20px' }} />} onClick={() => { setActiveWindow(1); forceUpdate() }} >

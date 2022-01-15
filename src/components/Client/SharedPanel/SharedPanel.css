@@ -1,0 +1,136 @@
+.shared-panel-content{
+    padding: 20px;
+}
+
+#container {
+    width: 100px;
+    height: 100px;
+    position: relative;
+  }
+  #navi{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  #infoi {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  #infoi {
+    z-index: 10;
+  }
+
+  #list-content-bar-in{
+    margin-left: auto;
+    background-color: black;
+    opacity: 0.8;
+    height: 650px;
+    width: 400px;
+    animation: widthin 0.5s;
+    -moz-animation: widthin 0.5s; /* Firefox */
+    -webkit-animation: widthin 0.5s; /* Safari and Chrome */
+    -o-animation: widthin 0.5s; /* Opera */
+  }
+
+ 
+@keyframes widthin {
+    from {
+        width:0px;
+    }
+    to {
+        width:400px;
+    }
+}
+@-moz-keyframes widthin { /* Firefox */
+    from {
+        width:0px;
+    }
+    to {
+        width:400px;
+    }
+}
+@-webkit-keyframes widthin { /* Safari and Chrome */
+    from {
+        width:0px;
+    }
+    to {
+        width:400px;
+    }
+}
+@-o-keyframes widthin { /* Opera */
+    from {
+        width:0px;
+    }
+    to {
+        width:400px;
+    }
+}
+
+#list-content-bar-out{
+    margin-left: auto;
+    background-color: black;
+    opacity: 0.5;
+    height: 650px;
+    width: 0px;
+    animation: widthout 0.5s;
+    -moz-animation: widthout 0.5s; /* Firefox */
+    -webkit-animation: widthout 0.5s; /* Safari and Chrome */
+    -o-animation: widthout 0.5s; /* Opera */
+  }
+
+ 
+@keyframes widthout {
+    from {
+        width:400px;
+    }
+    to {
+        width:0px;
+    }
+}
+@-moz-keyframes widthout { /* Firefox */
+    from {
+        width:400px;
+    }
+    to {
+        width:0px;
+    }
+}
+@-webkit-keyframes widthout { /* Safari and Chrome */
+    from {
+        width:400px;
+    }
+    to {
+        width:0px;
+    }
+}
+@-o-keyframes widthout { /* Opera */
+    from {
+        width:400px;
+    }
+    to {
+        width:0px;
+    }
+}
+
+.template-suggestion-wrap{
+    color : white;
+    height: 100%;
+    padding-top: 50px;
+}
+
+.import-template-button{
+    background-color: rgba(0, 0, 0, 0);
+    cursor: pointer;
+    border : none;
+}
+
+.import-template-button:focus {
+    outline: none;
+    box-shadow: none;
+  }

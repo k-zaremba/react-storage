@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
-import './HistoryList.css'
+import './OrdersList.css'
 import { ShoppingOutlined } from '@ant-design/icons';
 import { Collapse } from 'antd';
 import { PageHeader, Tag, Button, Statistic, Descriptions, Row, Popover } from 'antd';
-import HistoryItem from '../HistoryItem/HistoryItem';
+import OrderItem from '../OrderItem/OrderItem';
 const { Panel } = Collapse;
 
 
-const HistoryList = (props) => {
+const OrdersList = (props) => {
 
     const getDefaultOrderStatus = (status) => {
         if (status === 'placed')
@@ -49,9 +49,9 @@ const HistoryList = (props) => {
 
     }
 
-    const displayHistoryListContent = (elems) => {
+    const displayOrders = (elems) => {
         return elems.map((e) => {
-            return <HistoryItem forceUpdate={props.forceUpdate} key={e.product.id} itemInfo={e}></HistoryItem>
+            return <OrderItem forceUpdate={props.forceUpdate} key={e.product.id} itemInfo={e}></OrderItem>
         })
     }
 
@@ -74,7 +74,7 @@ const HistoryList = (props) => {
                         }}
                     />
                     <Statistic title="Status płatności" value={getPaymentOrderStatus(props.orderInfo.order.statusPayment)} />
-                    <Popover placement="right"  content={displayHistoryListContent(props.orderInfo.productList)}>
+                    <Popover placement="right"  content={displayOrders(props.orderInfo.productList)}>
                         <Button style ={{marginBottom: 'auto', marginLeft : '60px'}} type='text'>Zamówione produkty</Button>
                     </Popover>
                 </Row>
@@ -85,4 +85,4 @@ const HistoryList = (props) => {
     )
 }
 
-export default HistoryList
+export default OrdersList

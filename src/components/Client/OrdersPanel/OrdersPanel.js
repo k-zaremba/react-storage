@@ -1,21 +1,21 @@
 import React from 'react'
-import './HistoryPanel.css'
-import HistoryList from './HistoryList/HistoryList';
+import './OrdersPanel.css'
+import OrdersList from './OrdersList/OrdersList';
 import { Divider, BackTop } from 'antd';
 import { UpCircleFilled  } from '@ant-design/icons';
 
-const HistoryPanel = (props) => {
+const OrdersPanel = (props) => {
 
-    const displayHistoryPanelContent = (elems) => {
+    const displayOrdersPanelContent = (elems) => {
         return elems.map((order) => {
-            return <><HistoryList forceUpdate={props.forceUpdate} key={order.order.id} orderInfo={order}></HistoryList><Divider/></>
+            return <><OrdersList forceUpdate={props.forceUpdate} key={order.order.id} orderInfo={order}></OrdersList><Divider/></>
         })
     }
 
     return (
         <div className="history-panel-content">
             <div className='history-lists-holder' >
-                    {displayHistoryPanelContent(props.content)}
+                    {displayOrdersPanelContent(props.content)}
             </div>
             <BackTop>
                 <UpCircleFilled style={{fontSize : '40px', color : 'rgb(0,21,41)'}}/>
@@ -24,4 +24,4 @@ const HistoryPanel = (props) => {
     )
 }
 
-export default HistoryPanel
+export default OrdersPanel

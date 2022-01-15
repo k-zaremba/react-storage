@@ -1,0 +1,135 @@
+.pantry-list-item{
+    margin-bottom: 20px;
+    background-color: #ffffff;
+    border : 3px solid white;
+    transition: all 1s ease;
+}
+
+.pantry-list-item:hover{
+    border : 3px solid #b6e3fb;
+}
+
+.pantry-list-item-editing{
+    margin-bottom: 20px;
+    background-color: #ffffff;
+    border : 3px solid white;
+    transition: all 1s ease;
+}
+
+.pantry-list-item-editing:hover{
+    border : 3px solid #84c0f8;
+}
+
+.pantry-item-buttons-holder{
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 10px 0px 10px;
+    background-color: #ddf3ff;
+    transition: all 1s ease;
+}
+
+.pantry-item-buttons-holder-2{
+    display: flex;
+    justify-content: space-between;
+    height: 0px;
+    margin: 10px 10px 0px 10px;
+    background-color: #ddf3ff;
+    animation: heightout 1s;
+}
+
+.pantry-item-buttons-holder-editing{
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 10px 0px 10px;
+    background-color: #98cdff;
+    transition: all 1s ease;
+}
+
+.pantry-item-buttons-holder-editing:hover{
+    background-color: #ffffff;
+}
+
+.pantry-item-buttons-holder:hover{
+    background-color: #ffffff;
+}
+
+
+#height-in-pantry-item {
+    text-align: center;
+    animation: heightin 1s;
+    -moz-animation: heightin 1s; /* Firefox */
+    -webkit-animation: heightin 1s; /* Safari and Chrome */
+    -o-animation: heightin 1s; /* Opera */
+}
+@keyframes heightin {
+    from {
+        height:0px;
+    }
+    to {
+        height:32px;
+    }
+}
+@-moz-keyframes heightin { /* Firefox */
+    from {
+        height:0px;
+    }
+    to {
+        height:32px;
+    }
+}
+@-webkit-keyframes heightin { /* Safari and Chrome */
+    from {
+        height:0px;
+    }
+    to {
+        height:32px;
+    }
+}
+@-o-keyframes heightin { /* Opera */
+    from {
+        height:0px;
+    }
+    to {
+        height:32px;
+    }
+}
+
+#height-out-pantry-item {
+    text-align: center;
+    animation: sizeout 1s;
+    -moz-animation: sizeout 1s; /* Firefox */
+    -webkit-animation: sizeout 1s; /* Safari and Chrome */
+    -o-animation: sizeout 1s; /* Opera */
+}
+@keyframes heightout {
+    from {
+        height:32px;
+    }
+    to {
+        height:0px;
+    }
+}
+@-moz-keyframes heightout { /* Firefox */
+    from {
+        height:32px;
+    }
+    to {
+        height:0px;
+    }
+}
+@-webkit-keyframes heightout { /* Safari and Chrome */
+    from {
+        height:32px;
+    }
+    to {
+        height:0px;
+    }
+}
+@-o-keyframes heightout { /* Opera */
+    from {
+        height:32px;
+    }
+    to {
+        height:0px;
+    }
+}
