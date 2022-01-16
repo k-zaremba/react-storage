@@ -8,19 +8,11 @@ import { UpCircleFilled, } from '@ant-design/icons';
 const { Search } = Input;
 const { Option } = Select;
 
-const contentStyle = {
-    height: '650px',
-    color: '#fff',
-    lineHeight: '160px',
-    textAlign: 'center',
-    background: '#364d79',
-};
-
 const SharedPanel = (props) => {
     const [searchValue, setSearchValue] = useState("")
-    const [focus, setFocus] = useState('none')
 
     const [fetched, setFetched] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [templatesFetched, setTemplatesFetched] = useState([]);
 
     const fetchTemplates = () => {
@@ -38,6 +30,7 @@ const SharedPanel = (props) => {
                 console.log(res)
                 setTemplatesFetched(res)
                 setFetched(true)
+                setLoading(false)
             })
     };
 
@@ -51,25 +44,12 @@ const SharedPanel = (props) => {
         })
     }
 
-    const con = [
-        { name: 'filet z kurczaka wielokrotnie pasionego trawą', quantity: 5 },
-        { name: 'brokuł', quantity: 5 },
-        { name: 'pieczarki', quantity: 5 },
-        { name: 'śmietana', quantity: 5 },
-        { name: 'cebula', quantity: 5 },
-        { name: 'mąka', quantity: 5 },
-        { name: 'mleko', quantity: 5 },
-        { name: 'jajko 1szt', quantity: 5 },
-        { name: 'woda', quantity: 5 },
-        { name: 'olej', quantity: 5 }
-    ]
-
 
     const renderListContent = (listContent) => {
         return listContent.map(e => {
             return (
                 <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                    <p style={{ width: '70%' }}>{e.name}</p>
+                    <p style={{ width: '70%' }}>{e.product.name}</p>
                     <p>{e.quantity}</p>
                 </div>
             );
@@ -89,20 +69,45 @@ const SharedPanel = (props) => {
         );
     }
 
+    const imagesPredefined = [
+        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/nalesniki-z-kurczakiem-i-brokulami.jpg",
+        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/rosol_z_kury170242.jpg",
+        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/18_szybko-i-smacznie3676551.jpg",
+        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/bogracz-tradycyjny.jpg",
+        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/wegetarianski-mix-grillowane-tortille-z-warzywami-i-kielkami-slonecznika613581.jpg"
+    ]
+
+    const getAllShopSuggestions = () => {
+        console.log(templatesFetched)
+        return templatesFetched.map((t) => {
+            return (
+                <div id="container">
+                    <div id="navi">
+                        <img style={{ width: '1523px', height: '650px' }} src={imagesPredefined[t.shoppingList.id - 1]}></img>
+                    </div>
+
+                    <div className="hidden">
+                        {renderShopSuggestion(t.shoppingList.nameList, t.productModelList)}
+                    </div>
+                </div>
+            );
+        })
+    }
+
     useEffect(() => {
+        if (loading)
+            fetchTemplates();
     }, [])
 
     return (
         <div className="saved-lists-panel">
             <div className='payment-title-client'>
-                POLECAMY
+                POLECAMY!
             </div>
             <Divider />
             {!fetched &&
-                <div class="lista" id="content1">
-                    <div className="admin-spinner">
-                        <Spin />
-                    </div>
+                <div className="admin-spinner">
+                    <Spin />
                 </div>
             }
 
@@ -110,42 +115,7 @@ const SharedPanel = (props) => {
                 <>
                     <div style={{ padding: '0px 50px 0px 50px' }}>
                         <Carousel >
-                            <div id="container" onMouseEnter={() => { setFocus('true') }} onMouseLeave={() => { setFocus('false') }}>
-                                <div id="navi">
-                                    <img style={{ width: '1523px', height: '650px' }} src='https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/nalesniki-z-kurczakiem-i-brokulami.jpg'></img>
-                                </div>
-
-                                <div className="hidden">
-                                    {renderShopSuggestion('Naleśniki z kurczakiem i brokułami', con)}
-                                </div>
-
-
-
-                                {false && <>{focus === 'true' && <div id="infoin">
-
-                                    <div id="list-content-bar-in-top">
-                                        {renderShopSuggestion('Naleśniki z kurczakiem i brokułami', con)}
-                                    </div>
-                                </div>}
-                                    {focus === 'false' && <div id="infoout">
-                                        <div id="list-content-bar-out">
-                                            {renderShopSuggestion('Naleśniki z kurczakiem i brokułami', con)}
-                                        </div>
-                                    </div>}
-                                </>}
-
-
-                            </div>
-
-                            <div>
-                                <h3 style={contentStyle}>2</h3>
-                            </div>
-                            <div>
-                                <h3 style={contentStyle}>3</h3>
-                            </div>
-                            <div>
-                                <h3 style={contentStyle}>4</h3>
-                            </div>
+                            {getAllShopSuggestions()}
                         </Carousel>
                     </div>
 
