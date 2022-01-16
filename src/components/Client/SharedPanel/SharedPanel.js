@@ -8,8 +8,11 @@ import { UpCircleFilled, } from '@ant-design/icons';
 const { Search } = Input;
 const { Option } = Select;
 
+
+
 const SharedPanel = (props) => {
     const [searchValue, setSearchValue] = useState("")
+    const [focus, setFocus] = useState('none')
 
     const [fetched, setFetched] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -33,6 +36,26 @@ const SharedPanel = (props) => {
                 setLoading(false)
             })
     };
+
+    const imagesPredefined = [
+        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/nalesniki-z-kurczakiem-i-brokulami.jpg",
+        "https://ocdn.eu/pulscms-transforms/1/wbzk9kpTURBXy85MDI1NjNmMTljNzFmYTI2ZGE4Y2E4MzA1YjZjZThkNS5qcGeTlQMAJ80E5s0CwZMJpjc5OWM3MwaTBc0EsM0CdoGhMAE/rosol.jpg",
+        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/18_szybko-i-smacznie3676551.jpg",
+        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/bogracz-tradycyjny.jpg",
+        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/wegetarianski-mix-grillowane-tortille-z-warzywami-i-kielkami-slonecznika613581.jpg"
+    ]
+
+    const imageLastPanel = [
+        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/pio_13089948401588919579000.jpg",
+        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/zapiekane-nalesniki-po-bolonsku.jpg",
+        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/schab-z-pieczarkami-pod-pierzynka-z-majonezu-i-zoltego-sera-3.jpg",
+        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/golonka-w-piwie352401.jpg",
+        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/zupa-meksykanska-z-ogorkiem-i-papryka.jpg",
+        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/pio_12677431041588874770000.jpg",
+        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/kolorowe-risotto-z-kurczakiem.jpg",
+        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/pieczony-krolik.jpg",
+        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/salatka-sledziowa-z-miemniakami-i-zielonym-groszkiem474141.jpg",
+    ]
 
     const displaySavedListsContent = (elems) => {
         return elems.filter((elem) => {
@@ -69,14 +92,6 @@ const SharedPanel = (props) => {
         );
     }
 
-    const imagesPredefined = [
-        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/nalesniki-z-kurczakiem-i-brokulami.jpg",
-        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/rosol_z_kury170242.jpg",
-        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/18_szybko-i-smacznie3676551.jpg",
-        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/bogracz-tradycyjny.jpg",
-        "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/wegetarianski-mix-grillowane-tortille-z-warzywami-i-kielkami-slonecznika613581.jpg"
-    ]
-
     const getAllShopSuggestions = () => {
         console.log(templatesFetched)
         return templatesFetched.map((t) => {
@@ -94,11 +109,37 @@ const SharedPanel = (props) => {
         })
     }
 
+    const getLastPanelContent = () => {
+        return imageLastPanel.map((imgSrc) => {
+            return <img style={{ width: '507.66px', height: '216.66px' }} src={imgSrc}></img>
+        })
+    }
+
     useEffect(() => {
-        if (loading)
+        if(loading)
             fetchTemplates();
     }, [])
 
+    const contentStyle = {
+        height: '650px',
+        color: '#fff',
+        lineHeight: '160px',
+        background: '#364d79',
+    };
+
+    const con = [
+        {product : {name : 'filet  kurczaka wielokrotnie pasionego trawą'}, quantity : 5},
+        {product : {name : 'brokuł'},  quantity : 5},
+        {product : {name : 'pieczarki'},  quantity : 5},
+        {product : {name : 'śmietana'},  quantity : 5},
+        {product : {name : 'cebula'},  quantity : 5},
+        {product : {name : 'mąka'},  quantity : 5},
+        {product : {name : 'mleko'},  quantity : 5},
+        {product : {name : 'jajko 1sz' }, quantity : 5},
+        {product : {name : 'woda'},  quantity : 5},
+        {product : {name : 'olej'},  quantity : 5}
+    ]
+    
     return (
         <div className="saved-lists-panel">
             <div className='payment-title-client'>
@@ -115,7 +156,27 @@ const SharedPanel = (props) => {
                 <>
                     <div style={{ padding: '0px 50px 0px 50px' }}>
                         <Carousel >
-                            {getAllShopSuggestions()}
+
+                        {getAllShopSuggestions()}
+
+                        <div>
+                            <div style={contentStyle}>
+                                <div id="container">
+                                    <div id='navi1' style={{ display: 'flex', flexWrap: 'wrap', alignContent: 'flex-start', height: '650px', width: '1523px' }}>
+                                        {getLastPanelContent()}
+                                    </div>
+
+                                    <div className="hidden2">
+                                        <div className='template-suggestion-wrap'>
+                                            <div style={{ textAlign: 'center', marginBottom: '10px', fontSize: '30px' }}>OK</div>
+                                            <div style={{ borderBottom: 'solid 1px white', width: '80%', margin: 'auto', marginBottom: '10px' }}></div>
+                                            <div style={{ borderBottom: 'solid 1px white', width: '80%', margin: 'auto' }}>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         </Carousel>
                     </div>
 
