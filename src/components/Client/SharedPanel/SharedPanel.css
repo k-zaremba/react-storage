@@ -15,108 +15,27 @@
     left: 0;
   }
 
-  #infoi {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
-  #infoi {
+#container:hover .hidden{
+    right: 0px;
     z-index: 10;
-  }
+}
 
-  #list-content-bar-in{
-    margin-left: auto;
-    background-color: black;
-    opacity: 0.8;
-    height: 650px;
+#container .hidden {
     width: 400px;
-    animation: widthin 0.5s;
-    -moz-animation: widthin 0.5s; /* Firefox */
-    -webkit-animation: widthin 0.5s; /* Safari and Chrome */
-    -o-animation: widthin 0.5s; /* Opera */
-  }
-
- 
-@keyframes widthin {
-    from {
-        width:0px;
-    }
-    to {
-        width:400px;
-    }
-}
-@-moz-keyframes widthin { /* Firefox */
-    from {
-        width:0px;
-    }
-    to {
-        width:400px;
-    }
-}
-@-webkit-keyframes widthin { /* Safari and Chrome */
-    from {
-        width:0px;
-    }
-    to {
-        width:400px;
-    }
-}
-@-o-keyframes widthin { /* Opera */
-    from {
-        width:0px;
-    }
-    to {
-        width:400px;
-    }
-}
-
-#list-content-bar-out{
-    margin-left: auto;
-    background-color: black;
-    opacity: 0.5;
     height: 650px;
-    width: 0px;
-    animation: widthout 0.5s;
-    -moz-animation: widthout 0.5s; /* Firefox */
-    -webkit-animation: widthout 0.5s; /* Safari and Chrome */
-    -o-animation: widthout 0.5s; /* Opera */
-  }
+    position: absolute;
+    margin-left: 100%;
+    top: 0px;
+    right: -400px;
+    z-index: -1;
+    background-color: rgba(0, 0, 0, 0.8);
+    -webkit-transition: all 0.4s ease-out;
+       -moz-transition: all 0.4s ease-out;
+        -ms-transition: all 0.4s ease-out;
+         -o-transition: all 0.4s ease-out;
+            transition: all 0.4s ease-out;
+}
 
- 
-@keyframes widthout {
-    from {
-        width:400px;
-    }
-    to {
-        width:0px;
-    }
-}
-@-moz-keyframes widthout { /* Firefox */
-    from {
-        width:400px;
-    }
-    to {
-        width:0px;
-    }
-}
-@-webkit-keyframes widthout { /* Safari and Chrome */
-    from {
-        width:400px;
-    }
-    to {
-        width:0px;
-    }
-}
-@-o-keyframes widthout { /* Opera */
-    from {
-        width:400px;
-    }
-    to {
-        width:0px;
-    }
-}
 
 .template-suggestion-wrap{
     color : white;

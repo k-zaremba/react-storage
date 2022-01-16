@@ -44,7 +44,6 @@ const MainLayoutClient = () => {
     const [ordersListFetched, setOrdersListFetched] = useState([]);
     const [pantryFetched, setPantryFetched] = useState([]);
 
-
     const navigate = useNavigate()
     const [force, forceUpdate] = useReducer(x => x + 1, 0);
     const [forceShoppingList, forceShoppingListUpdate] = useReducer(x => x + 1, 0);
