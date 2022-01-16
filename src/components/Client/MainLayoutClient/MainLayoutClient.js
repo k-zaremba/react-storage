@@ -196,7 +196,7 @@ const MainLayoutClient = () => {
                     {activeWindow === 3 && <OrdersPanel forceUpdate={forceUpdate} content={filterOrders(['received'])}></OrdersPanel>}
                     {activeWindow === 8 && <CartPanel setActiveWindow={setActiveWindow} force={forceShoppingList} forceStoreUpdate={forceStoreUpdate} forceShoppingListUpdate={forceShoppingListUpdate}></CartPanel>}
                     {activeWindow === 9 && <PantryPanel forceUpdate={forceUpdate} pantry={pantryFetched} content={storeContentFetched}></PantryPanel>}
-                    {activeWindow === 10 && <SharedPanel></SharedPanel>}
+                    {activeWindow === 10 && <SharedPanel forceShoppingListUpdate={forceShoppingListUpdate}></SharedPanel>}
                     {activeWindow === 11 && <SavedListsPanel></SavedListsPanel>}
 
                 </div>}
@@ -223,16 +223,16 @@ const MainLayoutClient = () => {
 
                 <Sider style={{ position: 'fixed' }} className="sider-menu" trigger={null} collapsible collapsed={collapsed}>
                     <div className="logo" />
-                    <Menu className='test-wrapper-client' theme="dark" mode="inline" defaultSelectedKeys={['5']}>
-                        <Menu.Item className="menu-item-selector" key="5" icon={<DatabaseOutlined style={{ fontSize: '20px' }} />} onClick={() => { setActiveWindow(9); forceUpdate() }} >
+                    <Menu className='test-wrapper-client' theme="dark" mode="inline" defaultSelectedKeys={['9']} selectedKeys={[String(activeWindow)]}>
+                        <Menu.Item className="menu-item-selector" key="9" icon={<DatabaseOutlined style={{ fontSize: '20px' }} />} onClick={() => { setActiveWindow(9); forceUpdate() }} >
                             Spiżarnia
                         </Menu.Item>
 
-                        <Menu.Item className="menu-item-selector" key="6" icon={<ReadOutlined style={{ fontSize: '20px' }} />} onClick={() => { setActiveWindow(10); forceUpdate() }} >
+                        <Menu.Item className="menu-item-selector" key="10" icon={<ReadOutlined style={{ fontSize: '20px' }} />} onClick={() => { setActiveWindow(10); forceUpdate() }} >
                             Propozycje
                         </Menu.Item>
 
-                        <Menu.Item className="menu-item-selector" key="7" icon={<DatabaseOutlined style={{ fontSize: '20px' }} />} onClick={() => { setActiveWindow(11); forceUpdate() }} >
+                        <Menu.Item className="menu-item-selector" key="11" icon={<DatabaseOutlined style={{ fontSize: '20px' }} />} onClick={() => { setActiveWindow(11); forceUpdate() }} >
                             Twoje listy
                         </Menu.Item>
 
@@ -248,7 +248,7 @@ const MainLayoutClient = () => {
                             Historia
                         </Menu.Item>
 
-                        <Menu.Item className="menu-item-selector" key="4" icon={<LogoutOutlined style={{ fontSize: '20px' }} />} onClick={logoutAccount} >
+                        <Menu.Item className="menu-item-selector" key="15" icon={<LogoutOutlined style={{ fontSize: '20px' }} />} onClick={logoutAccount} >
                             Wyloguj
                         </Menu.Item>
                     </Menu>

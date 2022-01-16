@@ -16,7 +16,7 @@ const CashPaymentConfirmationPanel = (props) => {
     const redirect = () => {
         if (time === 0) {
             setTimeout(function () {
-                props.setActiveWindow(1);
+                props.setActiveWindow(9);
             }, 300);
         }
     }
@@ -50,7 +50,7 @@ const CashPaymentConfirmationPanel = (props) => {
                 extra={[
                     <Button type="primary" size='large' key="console" onClick={() => {
                         setTimeout(function () {
-                            props.setActiveWindow(1);
+                            props.setActiveWindow(9);
                         }, 300);
                     }}>
                         Wróć do sklepu

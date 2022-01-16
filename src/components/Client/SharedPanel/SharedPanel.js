@@ -4,6 +4,7 @@ import { Divider, BackTop, } from 'antd';
 import { Input, Space } from 'antd';
 import { Button, Select, Carousel, Spin } from 'antd';
 import { UpCircleFilled, } from '@ant-design/icons';
+import cart from '../../../cart';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -87,9 +88,16 @@ const SharedPanel = (props) => {
                 <div style={{ borderBottom: 'solid 1px white', width: '80%', margin: 'auto' }}>
                     {renderListContent(listContent)}
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}><Button type={'ghost'} style={{ border: 'none', color: 'white' }}>DODAJ DO LISTY</Button></div>
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}><Button type={'ghost'} onClick={() => {addTemplateToCart(listContent)}} style={{ border: 'none', color: 'white' }}>DODAJ DO LISTY</Button></div>
             </div>
         );
+    }
+
+    const addTemplateToCart = (content) => {
+        content.forEach(element => {
+            cart.updateProduct(element.product, element.quantity)
+        });
+        props.forceShoppingListUpdate();
     }
 
     const getAllShopSuggestions = () => {
@@ -167,9 +175,11 @@ const SharedPanel = (props) => {
                                     </div>
 
                                     <div className="hidden2">
-                                        <div className='template-suggestion-wrap'>
-                                            <div style={{ textAlign: 'center', marginBottom: '10px', fontSize: '30px' }}>OK</div>
+                                        <div className='template-final-wrap'>
                                             <div style={{ borderBottom: 'solid 1px white', width: '80%', margin: 'auto', marginBottom: '10px' }}></div>
+                                            <div style={{ textAlign: 'center', marginBottom: '10px', fontSize: '100px', fontWeight : '100' }}>
+                                                WIĘCEJ WKRÓTCE
+                                            </div>
                                             <div style={{ borderBottom: 'solid 1px white', width: '80%', margin: 'auto' }}>
                                             </div>
                                         </div>
