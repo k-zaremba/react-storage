@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import './SharedPanel.css'
 import { Divider, BackTop, } from 'antd';
 import { Input, Space } from 'antd';
-import { Button, Select, Carousel, Spin } from 'antd';
+import { Button, Select, Carousel, Spin, Card } from 'antd';
 import { UpCircleFilled, } from '@ant-design/icons';
 import cart from '../../../cart';
 
@@ -13,8 +13,6 @@ const { Option } = Select;
 
 const SharedPanel = (props) => {
     const [searchValue, setSearchValue] = useState("")
-    const [focus, setFocus] = useState('none')
-
     const [fetched, setFetched] = useState(false);
     const [loading, setLoading] = useState(true);
     const [templatesFetched, setTemplatesFetched] = useState([]);
@@ -64,7 +62,9 @@ const SharedPanel = (props) => {
 
             return elemName.includes(searchValue.toLowerCase())
         }).map((pair) => {
-            return <div></div>
+            return <div>
+
+            </div>
         })
     }
 
@@ -88,7 +88,7 @@ const SharedPanel = (props) => {
                 <div style={{ borderBottom: 'solid 1px white', width: '80%', margin: 'auto' }}>
                     {renderListContent(listContent)}
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}><Button type={'ghost'} onClick={() => {addTemplateToCart(listContent)}} style={{ border: 'none', color: 'white' }}>DODAJ DO LISTY</Button></div>
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}><Button type={'ghost'} onClick={() => { addTemplateToCart(listContent) }} style={{ border: 'none', color: 'white' }}>DODAJ DO LISTY</Button></div>
             </div>
         );
     }
@@ -124,7 +124,7 @@ const SharedPanel = (props) => {
     }
 
     useEffect(() => {
-        if(loading)
+        if (loading)
             fetchTemplates();
     }, [])
 
@@ -135,21 +135,8 @@ const SharedPanel = (props) => {
         background: '#364d79',
     };
 
-    const con = [
-        {product : {name : 'filet  kurczaka wielokrotnie pasionego trawą'}, quantity : 5},
-        {product : {name : 'brokuł'},  quantity : 5},
-        {product : {name : 'pieczarki'},  quantity : 5},
-        {product : {name : 'śmietana'},  quantity : 5},
-        {product : {name : 'cebula'},  quantity : 5},
-        {product : {name : 'mąka'},  quantity : 5},
-        {product : {name : 'mleko'},  quantity : 5},
-        {product : {name : 'jajko 1sz' }, quantity : 5},
-        {product : {name : 'woda'},  quantity : 5},
-        {product : {name : 'olej'},  quantity : 5}
-    ]
-    
     return (
-        <div className="saved-lists-panel">
+        <div className="shared-panel">
             <div className='payment-title-client'>
                 POLECAMY!
             </div>
@@ -165,28 +152,28 @@ const SharedPanel = (props) => {
                     <div style={{ padding: '0px 50px 0px 50px' }}>
                         <Carousel >
 
-                        {getAllShopSuggestions()}
+                            {getAllShopSuggestions()}
 
-                        <div>
-                            <div style={contentStyle}>
-                                <div id="container">
-                                    <div id='navi1' style={{ display: 'flex', flexWrap: 'wrap', alignContent: 'flex-start', height: '650px', width: '1523px' }}>
-                                        {getLastPanelContent()}
-                                    </div>
+                            <div>
+                                <div style={contentStyle}>
+                                    <div id="container">
+                                        <div id='navi1' style={{ display: 'flex', flexWrap: 'wrap', alignContent: 'flex-start', height: '650px', width: '1523px' }}>
+                                            {getLastPanelContent()}
+                                        </div>
 
-                                    <div className="hidden2">
-                                        <div className='template-final-wrap'>
-                                            <div style={{ borderBottom: 'solid 1px white', width: '80%', margin: 'auto', marginBottom: '10px' }}></div>
-                                            <div style={{ textAlign: 'center', marginBottom: '10px', fontSize: '100px', fontWeight : '100' }}>
-                                                WIĘCEJ WKRÓTCE
-                                            </div>
-                                            <div style={{ borderBottom: 'solid 1px white', width: '80%', margin: 'auto' }}>
+                                        <div className="hidden2">
+                                            <div className='template-final-wrap'>
+                                                <div style={{ borderBottom: 'solid 1px white', width: '80%', margin: 'auto' }}></div>
+                                                <div style={{ textAlign: 'center', fontSize: '100px', fontWeight: '100' }}>
+                                                    WIĘCEJ WKRÓTCE
+                                                </div>
+                                                <div style={{ borderBottom: 'solid 1px white', width: '80%', margin: 'auto' }}>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         </Carousel>
                     </div>
 

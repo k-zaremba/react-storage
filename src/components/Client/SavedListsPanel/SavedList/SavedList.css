@@ -1,0 +1,16 @@
+.saved-list-t{
+    background-color: #89aae7;
+    font-size: 17px;
+    transition: all 1s ease;
+    width: 100%;
+}
+
+.saved-list-t:hover{
+    background-color: #a6bbe2;
+}
+
+.card-saved-wrapper{
+    min-width: 400px;
+    width: fit-content;
+    margin : 0px 2px 50px 2px 
+}

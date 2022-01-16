@@ -1,0 +1,37 @@
+#containera {
+    position: relative;
+  }
+  #navia{
+  }
+
+
+#containera .hiddena {
+    color : white;
+    width: 40%;
+    height: fit-content;
+    position: absolute;
+    left: 30%;
+    background-color: rgba(0, 0, 0, 0.171);
+    -webkit-transition: all 0.8s ease;
+       -moz-transition: all 0.8s ease;
+        -ms-transition: all 0.8s ease;
+         -o-transition: all 0.8s ease;
+            transition: all 0.8s ease;
+}
+
+.saved-lists-panel-content{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 50px;
+}
+
+.drawer-wrapper{
+  position: relative;
+  padding: 48px;
+  overflow: hidden;
+  text-align: center;
+  background: #fafafa;
+  border: 1px solid #ebedf0;
+  border-radius: 2px;
+}
