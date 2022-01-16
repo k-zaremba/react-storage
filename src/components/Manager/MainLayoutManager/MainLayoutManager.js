@@ -69,7 +69,7 @@ const MainLayoutManager = () => {
             }
         };
 
-        fetch('http://localhost:8080/storage/statistics', requestOptions1)
+        fetch('http://localhost:8080/storage/statistics', requestOptions1) //TODO: naprawic ten syf bo sie nie fethchuje do OrderPanel
             .then(res => res.json())
             .then((res) => {
                 console.log(res)

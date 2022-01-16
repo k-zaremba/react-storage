@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import './CartPanel.css'
-import { Table, Space, Divider, Spin, Tag, Button, BackTop} from 'antd';
+import { Table, Space, Divider, Spin, Tag, Button, BackTop, Popover, Input, Form} from 'antd';
 import { PlusOutlined, MinusOutlined, CloseOutlined, UpCircleFilled } from '@ant-design/icons';
 
 import cart from '../../../cart';
 
 const CartPanel = (props) => {
     const [spinner, setSpinner] = useState(false)
-
+    const [listName, setListName] = useState('Moja lista')
+    
     var data;
 
     const isUserRegular = () => {
@@ -77,6 +78,7 @@ const CartPanel = (props) => {
                 console.log(res)
                 sessionStorage.setItem('activeOrderId', res.id)
             })
+
     }
 
     const placeOrder = () => {
@@ -87,6 +89,52 @@ const CartPanel = (props) => {
             postOrder(orderMap)
             props.setActiveWindow(4);
         }, 1000);
+    }
+
+    const saveList = () => {
+        if(listName === '') return;
+
+        var item = sessionStorage.getItem('user')
+        var user = item ? JSON.parse(item) : {}
+
+        var orderMap = cart.getProductsOrderMap()
+        if (orderMap == null) return;
+        if (Object.keys(orderMap).length === 0) return;
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                clientId: user.client.id,
+                nameList: listName,
+                productModelList: orderMap,
+              })
+          };
+      
+          fetch('http://localhost:8080/storage/shoppinglist/add', requestOptions)
+            .then(res => res.json())
+            .then((res) => {
+              console.log(res)
+            })
+
+        setListName('')
+    }
+
+
+    const displayListAdditionForm = () => {
+    
+        // userId
+        // nazwa listy
+        // produkty
+        return (
+            <div style={{ display: 'flex' }}>
+                <Input style={{ width: '300px' }} placeholder='Nazwa listy' value={listName} maxLength={100} onChange={(e) => { setListName(e.target.value); }}></Input>
+                <Button htmlType="submit" onClick={saveList}>ZAPISZ</Button>
+            </div>
+        )
     }
 
     const columns = [
@@ -114,8 +162,8 @@ const CartPanel = (props) => {
             render: (text, record) => (
                 <Space size="middle">
                     <Button style={{ border: 'none' }} icon={<MinusOutlined />} onClick={() => { console.log(record); cart.updateProduct(record, -1); props.forceShoppingListUpdate(); props.forceStoreUpdate() }} />
-                    <Button style={{ border: 'none' }} icon={<PlusOutlined />} onClick={() => { console.log(record); cart.updateProduct(record, 1); props.forceShoppingListUpdate(); props.forceStoreUpdate()}} />
-                    <Button type='danger' style={{ border: 'none', background: 'white', color: 'red', boxShadow: '0 2px 0 rgb(0 0 0 / 2%)' }} icon={<CloseOutlined />} onClick={() => { cart.deleteProduct(record); props.forceShoppingListUpdate(); props.forceStoreUpdate()}} />
+                    <Button style={{ border: 'none' }} icon={<PlusOutlined />} onClick={() => { console.log(record); cart.updateProduct(record, 1); props.forceShoppingListUpdate(); props.forceStoreUpdate() }} />
+                    <Button type='danger' style={{ border: 'none', background: 'white', color: 'red', boxShadow: '0 2px 0 rgb(0 0 0 / 2%)' }} icon={<CloseOutlined />} onClick={() => { cart.deleteProduct(record); props.forceShoppingListUpdate(); props.forceStoreUpdate() }} />
                 </Space>
             ),
         },
@@ -129,41 +177,56 @@ const CartPanel = (props) => {
             </div>
             <Divider />
             <div className='cart-payment-summary'>
-            {cart.isNotEmpty() &&
-                <>
-                    <Table pagination={false} columns={columns} dataSource={getListProducts()} />
-                    {!spinner && isUserRegular() && <div className='payment-box-summary'>
-                        <div className='payment'>
-                        <Tag style={{ fontSize: '15px', height : '35px', display : 'flex', alignItems : 'center' }} color="geekblue">STAŁY KLIENT -20%</Tag>
-                            <div className='summary'>
-                                {'SUMA: ' + parseFloat(getShoppingListValue()).toFixed(2)} zł
-                            </div>
-                            <Button type="primary" shape="default" size={'large'} onClick={() => { placeOrder() }}>
-                                Złóż zamówienie
-                            </Button>
+                {cart.isNotEmpty() &&
+                    <>
+                        <Table pagination={false} columns={columns} dataSource={getListProducts()} />
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <Popover
+                                content={displayListAdditionForm()}
+                                title="Title"
+                                trigger="click"
+                                placement="bottomLeft"
+                            >
+                                <Button type="primary" shape="default" size={'large'} type={'ghost'} onClick={() => { }} style={{ border: 'none', fontSize: '23px', fontWeight: '100', boxShadow: 'none' }}>
+                                    ZAPISZ LISTĘ
+                                </Button>
+                            </Popover>
                         </div>
-                    </div>}
 
-                    {!spinner && !isUserRegular() && <div className='payment'>
-                            <div className='summary'>
-                                {'SUMA: ' + getShoppingListValue().toLocaleString(undefined, { minimumFractionDigits: 2 })} zł
-                            </div>
-                            <Button type="primary" shape="default" size={'large'} onClick={() => { placeOrder() }}>
-                                Złóż zamówienie
-                            </Button>
-                    </div>}
+                            {!spinner && isUserRegular() && <div className='payment-box-summary'>
+                                <div className='payment'>
+                                    <Tag style={{ fontSize: '15px', height: '35px', display: 'flex', alignItems: 'center' }} color="geekblue">STAŁY KLIENT -20%</Tag>
+                                    <div className='summary'>
+                                        {'SUMA: ' + parseFloat(getShoppingListValue()).toFixed(2)} zł
+                                    </div>
+                                    <Button type="primary" shape="default" size={'large'} onClick={() => { placeOrder() }}>
+                                        Złóż zamówienie
+                                    </Button>
+                                </div>
+                            </div>}
 
-                    {spinner &&
-                        <div style={{ textAlign: 'right', marginRight: '70px', marginTop: '70px' }}>
-                            <Spin />
+                            {!spinner && !isUserRegular() && <div className='payment'>
+                                <div className='summary'>
+                                    {'SUMA: ' + getShoppingListValue().toLocaleString(undefined, { minimumFractionDigits: 2 })} zł
+                                </div>
+                                <Button type="primary" shape="default" size={'large'} onClick={() => { placeOrder() }}>
+                                    Złóż zamówienie
+                                </Button>
+                            </div>}
+
+                            {spinner &&
+                                <div style={{ textAlign: 'right', marginRight: '70px', marginTop: '70px' }}>
+                                    <Spin />
+                                </div>
+                            }
                         </div>
-                    }
-
-                </>
-            }
+                    </>
+                }
             </div>
             <BackTop>
-                <UpCircleFilled style={{fontSize : '40px', color : 'rgb(0,21,41)'}}/>
+                <UpCircleFilled style={{ fontSize: '40px', color: 'rgb(0,21,41)' }} />
             </BackTop>
         </div>
     )

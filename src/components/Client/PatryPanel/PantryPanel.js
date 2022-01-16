@@ -143,7 +143,7 @@ const PantryPanel = (props) => {
             </div>
 
             <div class='search-filter-bar'>
-                <Search size={'large'} placeholder="input search text" allowClear value={searchValue} onChange={(e) => { setSearchValue(e.target.value) }} onSearch={(val) => { setSearchValue(val) }} />
+                <Search size={'large'} placeholder="Nazwa produktu" allowClear value={searchValue} onChange={(e) => { setSearchValue(e.target.value) }} onSearch={(val) => { setSearchValue(val) }} />
             </div>
             <div className='pantry-panel-content'>
                 <Space direction='horizontal' wrap style={{ justifyContent: 'center', gap: '25px', marginTop: '20px' }}>

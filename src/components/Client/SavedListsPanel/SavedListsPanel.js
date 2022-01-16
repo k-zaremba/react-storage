@@ -5,7 +5,7 @@ import { Input, Space } from 'antd';
 import { Select, Spin, Card, List } from 'antd';
 import { Drawer, Button } from 'antd';
 import { UpCircleFilled, } from '@ant-design/icons';
-import { EditOutlined, DeleteOutlined, CheckOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, CheckOutlined, ShareAltOutlined } from '@ant-design/icons';
 import SavedList from './SavedList/SavedList';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -20,8 +20,8 @@ const SavedListsPanel = (props) => {
     const [savedListsFetched, setSavedListsFetched] = useState([]);
     const [visible, setVisible] = useState(false);
     const [editing, setEditing] = useState(false);
-    const [drawerContent, setDrawerContent] = useState([])
-    const [drawerName, setDrawerName] = useState('')
+    const [drawerInfo, setDrawerInfo] = useState({})
+
     const [newName, setNewName] = useState('')
 
 
@@ -48,12 +48,35 @@ const SavedListsPanel = (props) => {
             })
     };
 
+    const setListStatusShared = (isTrue) => {
+        var url = ''
+        if(isTrue)
+            url = `http://localhost:8080/storage/shoppinglist/share?shoppingListId=${drawerInfo.id}`;
+        else
+            url = `http://localhost:8080/storage/shoppinglist/unshare?shoppingListId=${drawerInfo.id}`;
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json' // TODO: zrobić resfresh
+            }
+        };
+        fetch(url, requestOptions)
+            .then(res => res.json())
+            .then((res) => {
+                console.log(res)
+            })
+    };
+
     const displaySavedListsFiltered = (elems) => {
         return elems.filter((elem) => {
             const elemName = elem.shoppingList.nameList.toLowerCase();
-            return elemName.includes(searchValue.toLowerCase())}).map((pair) => {
-            return <SavedList pair={pair} setDrawerName={setDrawerName} setDrawerContent={setDrawerContent} showDrawer={showDrawer} closeDrawer={closeDrawer}></SavedList>
-    })}
+            return elemName.includes(searchValue.toLowerCase())
+        }).map((pair) => {
+            return <SavedList setDrawerInfo={setDrawerInfo} pair={pair} showDrawer={showDrawer} closeDrawer={closeDrawer}></SavedList>
+        })
+    }
 
     function compare(a, b) {
         if (a.shoppingList.nameList < b.shoppingList.nameList)
@@ -67,7 +90,6 @@ const SavedListsPanel = (props) => {
         return arr.sort(compare)
     }
 
-
     const showDrawer = () => {
         setVisible(true)
         setEditing(false)
@@ -78,28 +100,26 @@ const SavedListsPanel = (props) => {
     };
 
     const getDrawerContent = () => {
-        var content = drawerContent;
-        var price = 0;
-        content.forEach((elem) => {price += elem.product.value * elem.quantity})
+        var content = drawerInfo.content;
         return (
             <>
-                {!editing && 
+                {!editing &&
                     <>
-                        <div style={{marginBottom : '10px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                            <Button onClick={() => { setEditing(!editing) }} style={{ border: 'none',  backgroundColor : 'rgba(0,0,0,0)' }}><EditOutlined style={{ fontSize: '18px'}} /></Button>
+                        <div style={{ marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                            <Button onClick={() => { setEditing(!editing) }} style={{ border: 'none', backgroundColor: 'rgba(0,0,0,0)' }}><EditOutlined style={{ fontSize: '18px' }} /></Button>
 
                         </div>
-                        <div style={{ fontSize: '25px', textAlign: 'center', width: '100%' }}>{drawerName}</div>
+                        <div style={{ fontSize: '25px', textAlign: 'center', width: '100%' }}>{drawerInfo.name}</div>
                     </>
                 }
 
-                {editing && 
+                {editing &&
                     <>
-                        <div style={{marginBottom : '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <Button onClick={() => { }} type='danger' style={{ border: 'none', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'red', boxShadow: '0 2px 0 rgb(0 0 0 / 2%)' }} icon={<DeleteOutlined style={{ fontSize: 22 }} />} />
-                            <Button onClick={() => {setEditing(!editing)}} style={{ border: 'none', backgroundColor : 'rgba(0,0,0,0)' }}><CheckOutlined style={{ fontSize: '18px' }} /></Button>
+                        <div style={{ marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <Button onClick={() => { }} type='danger' style={{ border: 'none', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'red', boxShadow: '0 2px 0 rgb(0 0 0 / 2%)' }} icon={<DeleteOutlined style={{ fontSize: 22 }} />} />
+                            <Button onClick={() => { setEditing(!editing) }} style={{ border: 'none', backgroundColor: 'rgba(0,0,0,0)' }}><CheckOutlined style={{ fontSize: '18px' }} /></Button>
                         </div>
-                        <Input style={{ fontSize: 25, borderBottom: 'solid 1px black' }} size={'middle'} defaultValue={drawerName} bordered={false} onChange={(v) => { setNewName(v) }}></Input>
+                        <Input style={{ fontSize: 25, borderBottom: 'solid 1px black' }} size={'middle'} defaultValue={drawerInfo.name} bordered={false} onChange={(v) => { setNewName(v) }}></Input>
 
                     </>
                 }
@@ -109,21 +129,36 @@ const SavedListsPanel = (props) => {
                 <InfiniteScroll
                     dataLength={20}
                     hasMore={false}
-                    endMessage={<Divider style={{ fontSize: '17px' }} plain>{price.toFixed(2)} zł</Divider>}
+                    endMessage={<Divider plain style={{ marginTop: '15px' }}>
+                        <Button type={'ghost'} onClick={() => { }} style={{ border: 'none', fontSize: '18px' }}>
+                            DODAJ DO LISTY
+                        </Button>
+                    </Divider>}
                     scrollableTarget="scrollableDiv"
                 >
                     <List
                         dataSource={content}
                         renderItem={elem => (
-                            <List.Item style={{padding : '7px', justifyContent : 'space-around'}} key={elem.product.id}>
-                                    <div style={{ width: '200px', textAlign: 'left', fontSize: '17px' }}>{elem.product.name}</div>
-                                    <div style={{ fontSize: '17px' }}>{elem.quantity}</div>
+                            <List.Item style={{ padding: '7px', justifyContent: 'space-between' }} key={elem.product.id}>
+                                <img src={elem.product.imgUrl} style={{ width: '23px', height: '23px' }} />
+                                <div style={{ width: '200px', textAlign: 'left', fontSize: '17px' }}>{elem.product.name}</div>
+                                <div style={{ fontSize: '17px' }}>{elem.quantity}</div>
                             </List.Item>
                         )}
                     />
                 </InfiniteScroll>
 
-
+                <div className='share-button'>
+                    {drawerInfo.status === 'private' &&
+                        <Button onClick={() => {setListStatusShared(true)}} style={{ width: '100%', height: '50px' }} icon={<ShareAltOutlined />}>
+                            UDOSTĘPNIJ LISTĘ
+                        </Button>}
+                    {drawerInfo.status === 'public' &&
+                        <Button onClick={() => {setListStatusShared(false)}} style={{ width: '100%', height: '50px' }} icon={<ShareAltOutlined />}>
+                            WYŁĄCZ UDOSTPĘNIENIE
+                        </Button> // TODO: podłączyć udostpenianie i dodawanie produktow do koszyka z listy i usuwanie i edytowanie nazwy
+                    }
+                </div>
             </>
         );
 
@@ -152,24 +187,26 @@ const SavedListsPanel = (props) => {
             {fetched &&
                 <>
                     <div class='search-filter-bar'>
-                        <Search size={'large'} placeholder="input search text" allowClear value={searchValue} onChange={(e) => { setSearchValue(e.target.value) }} onSearch={(val) => { setSearchValue(val) }} />
+                        <Search size={'large'} placeholder="Nazwa listy" allowClear value={searchValue} onChange={(e) => { setSearchValue(e.target.value) }} onSearch={(val) => { setSearchValue(val) }} />
                     </div>
 
                     <div className='saved-lists-panel-content'>
                         {displaySavedListsFiltered(sortListsByName(savedListsFetched))}
                     </div>
 
-                    <Drawer
-                        placement="right"
-                        closable={false}
-                        onClose={closeDrawer}
-                        visible={visible}
-                        getContainer={true}
-                        autoFocus={false}
-                        style={{position: 'absolute', top: `${window.pageYOffset}px` }}
-                    >
-                        {getDrawerContent(drawerContent)}
-                    </Drawer>
+                    <div className='drawer-wrapper'>
+                        <Drawer
+                            placement="right"
+                            closable={false}
+                            onClose={closeDrawer}
+                            visible={visible}
+                            getContainer={true}
+                            autoFocus={false}
+                            style={{ position: 'absolute', top: `${window.pageYOffset}px` }}
+                        >
+                            {getDrawerContent()}
+                        </Drawer>
+                    </div>
                 </>
             }
 

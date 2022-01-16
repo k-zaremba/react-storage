@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import './SavedList.css'
-import { Divider, BackTop, } from 'antd';
 import { Input, Space } from 'antd';
 import { Button, Select, Carousel, Spin, Card } from 'antd';
 import { UpCircleFilled, } from '@ant-design/icons';
 
 const { Search } = Input;
 const { Option } = Select;
+//TODO: POWIADAMIANIE KLIENTA O WYCZERPUJACYM SIE ZAPASIE (po liginie np i w spizarce badge )
 
-
+//TODO: przeniesc do plikow fetchowanie wszsytkich rzeczy
 const SavedList = (props) => {
 
     const handleClick = () => {
-        console.log(props.pair.productModelList)
-        props.setDrawerName(props.pair.shoppingList.nameList)
-        props.setDrawerContent(props.pair.productModelList)
+        props.setDrawerInfo(
+            {id : props.pair.shoppingList.id,
+            name : props.pair.shoppingList.nameList,
+            status : props.pair.shoppingList.status,
+            content : props.pair.productModelList})
         props.showDrawer()
     }
 

@@ -134,6 +134,7 @@ const SharedPanel = (props) => {
         lineHeight: '160px',
         background: '#364d79',
     };
+    // TODO: zmiana ikon na kliencie
 
     return (
         <div className="shared-panel">
@@ -150,7 +151,7 @@ const SharedPanel = (props) => {
             {fetched &&
                 <>
                     <div style={{ padding: '0px 50px 0px 50px' }}>
-                        <Carousel >
+                        <Carousel autoplay>
 
                             {getAllShopSuggestions()}
 
@@ -184,7 +185,7 @@ const SharedPanel = (props) => {
                     <Divider />
 
                     <div class='search-filter-bar'>
-                        <Search size={'large'} placeholder="input search text" allowClear value={searchValue} onChange={(e) => { setSearchValue(e.target.value) }} onSearch={(val) => { setSearchValue(val) }} />
+                        <Search size={'large'} placeholder="Nazwa listy" allowClear value={searchValue} onChange={(e) => { setSearchValue(e.target.value) }} onSearch={(val) => { setSearchValue(val) }} />
                     </div>
 
                     <div className='shared-panel-content'>

@@ -37,7 +37,7 @@ const StoreList = (props) =>{
     return (
         <div>
             <div class ='search-filter-bar'>
-                <Search placeholder="input search text" size={'large'} allowClear value={searchValue} onChange={(e) => {setSearchValue(e.target.value)}} onSearch={(val)=>{setSearchValue(val)}}/>
+                <Search placeholder="Nazwa produktu" size={'large'} allowClear value={searchValue} onChange={(e) => {setSearchValue(e.target.value)}} onSearch={(val)=>{setSearchValue(val)}}/>
             </div>
 
             <Divider/>
