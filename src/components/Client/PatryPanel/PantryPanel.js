@@ -1,12 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './PantryPanel.css'
-import { Divider, BackTop } from 'antd';
-import { PageHeader, Statistic, Row, Input, Space } from 'antd';
-import { Button, InputNumber, Select } from 'antd';
-import { PlusOutlined, MinusOutlined, CloseOutlined } from '@ant-design/icons';
-
-import { EditOutlined, CheckOutlined } from '@ant-design/icons';
-import { UpCircleFilled ,} from '@ant-design/icons';
+import { Button, InputNumber, Select, Spin, Input, Space, Divider, BackTop  } from 'antd';
+import { UpCircleFilled, } from '@ant-design/icons';
 import PantryItem from './PantryItem/PantryItem';
 
 const { Search } = Input;
@@ -18,6 +13,14 @@ const PantryPanel = (props) => {
     const [modName, setModName] = useState('')
     const [modCount, setModCount] = useState(1)
     const [editing, setEditing] = useState(false);
+
+    const [pantryFetched, setPantryFetched] = useState([]);
+    const [fetched, setFetched] = useState(false);
+    const [loading, setLoading] = useState(true);
+
+    const [storeContentFetched, setStoreContentFetched] = useState([]);
+    const [fetched2, setFetched2] = useState(false);
+    const [loading2, setLoading2] = useState(true);
 
     const addToPantry = (itemId, quantity) => {
         if (quantity == 0) return;
@@ -45,6 +48,48 @@ const PantryPanel = (props) => {
             })
     }
 
+    const fetchStoreContent = () => {
+        setFetched2(false)
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        };
+
+        fetch('http://localhost:8080/storage/products', requestOptions)
+            .then(res => res.json())
+            .then((res) => {
+                console.log(res)
+                setStoreContentFetched(res)
+                setFetched2(true)
+                setLoading2(false)
+            })
+    };
+
+    const fetchPantry = () => {
+        var item = sessionStorage.getItem('user')
+        var user = item ? JSON.parse(item) : {}
+
+        setFetched(false)
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        };
+        fetch(`http://localhost:8080/storage/pantry/${user.client.id}`, requestOptions)
+            .then(res => res.json())
+            .then((res) => {
+                console.log(res)
+                setPantryFetched(res)
+                setLoading(false)
+                setFetched(true)
+            })
+    };
+
     const setCount = (value) => {
         setModCount(value)
     }
@@ -60,7 +105,7 @@ const PantryPanel = (props) => {
     }
 
     const getProdId = (itemName) => {
-        if(itemName == '') return -1;
+        if (itemName == '') return -1;
 
         var content = props.content;
         var idx = content.findIndex(i => i.name === itemName);
@@ -70,7 +115,7 @@ const PantryPanel = (props) => {
     const handleClick = () => {
         console.log(modName, modCount)
         var id = getProdId(modName)
-        if(id == -1) return;
+        if (id == -1) return;
         addToPantry(id, modCount)
         props.forceUpdate();
     }
@@ -81,10 +126,11 @@ const PantryPanel = (props) => {
 
             return elemName.includes(searchValue.toLowerCase())
         }).map((pair) => {
-            return <PantryItem forceUpdate={props.forceUpdate} addToPantry={addToPantry} isEdited={isEdited} pair={pair}></PantryItem>})
+            return <PantryItem forceUpdate={props.forceUpdate} addToPantry={addToPantry} isEdited={isEdited} pair={pair}></PantryItem>
+        })
     }
 
-    
+
     function compare(a, b) {
         if (a.product.id < b.product.id)
             return -1
@@ -97,6 +143,13 @@ const PantryPanel = (props) => {
         return arr.sort(compare)
     }
 
+    useEffect(() => {
+        if (loading)
+            fetchPantry();
+        if (loading2)
+            fetchStoreContent()
+    }, [])
+
     return (
         <div className="pantry-panel">
             <div className='payment-title-client'>
@@ -104,52 +157,69 @@ const PantryPanel = (props) => {
             </div>
             <Divider />
 
-            <div style={{display : 'flex', justifyContent: 'center'}}>
-                <Space direction='vertical'>
+            {!fetched2 &&
+                <div className="admin-spinner">
+                    <Spin />
+                </div>
+            }
 
-                    {!editing &&
-                    <Button type="primary" shape="default" size={'large'} onClick={() => { setEditing(!editing) }}>
-                        EDYTUJ SPIŻARNIĘ
-                    </Button>}
+            {fetched2 &&
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Space direction='vertical'>
 
-                    {
-                        editing &&
-                        <Space direction='horizontal' >
-                            <Select size="large" style={{width : 250}}
-                                showSearch
-                                placeholder="Wybierz produkt"
-                                optionFilterProp="children"
-                                onChange={setProduct}
-                                filterOption={(input, option) =>
-                                    option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                }
-                            >
-                                {getOptionValues(props.content)}
-                            </Select>
+                        {!editing &&
+                            <Button type="primary" shape="default" size={'large'} onClick={() => { setEditing(!editing) }}>
+                                EDYTUJ SPIŻARNIĘ
+                            </Button>}
 
-                            <InputNumber size="large" min={1} max={100} defaultValue={1} onChange={setCount} />
+                        {
+                            editing &&
+                            <Space direction='horizontal' >
+                                <Select size="large" style={{ width: 250 }}
+                                    showSearch
+                                    placeholder="Wybierz produkt"
+                                    optionFilterProp="children"
+                                    onChange={setProduct}
+                                    filterOption={(input, option) =>
+                                        option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                    }
+                                >
+                                    {getOptionValues(storeContentFetched)}
+                                </Select>
 
-                            <Button type="primary" shape="rectangle" size={'large'} onClick={handleClick}>
-                                DODAJ
-                            </Button>
+                                <InputNumber size="large" min={1} max={100} defaultValue={1} onChange={setCount} />
 
-                            {editing &&
-                                <Button type="primary" shape="default" size={'large'} onClick={() => { setEditing(!editing) }}>
-                                    ZATWIERDŹ
-                                </Button>}
+                                <Button type="primary" shape="rectangle" size={'large'} onClick={handleClick}>
+                                    DODAJ
+                                </Button>
+
+                                {editing &&
+                                    <Button type="primary" shape="default" size={'large'} onClick={() => { setEditing(!editing) }}>
+                                        ZATWIERDŹ
+                                    </Button>}
+                            </Space>
+                        }
+                    </Space>
+                </div>
+            }
+
+            {!fetched &&
+                <div className="admin-spinner">
+                    <Spin />
+                </div>
+            }
+
+            {fetched &&
+                <>
+                    <div class='search-filter-bar'>
+                        <Search size={'large'} placeholder="Nazwa produktu" allowClear value={searchValue} onChange={(e) => { setSearchValue(e.target.value) }} onSearch={(val) => { setSearchValue(val) }} />
+                    </div>
+                    <div className='pantry-panel-content'>
+                        <Space direction='horizontal' wrap style={{ justifyContent: 'center', gap: '25px', marginTop: '20px' }}>
+                            {displayPantryContent(sortProductsById(pantryFetched), editing)}
                         </Space>
-                    }
-                </Space>
-            </div>
-
-            <div class='search-filter-bar'>
-                <Search size={'large'} placeholder="Nazwa produktu" allowClear value={searchValue} onChange={(e) => { setSearchValue(e.target.value) }} onSearch={(val) => { setSearchValue(val) }} />
-            </div>
-            <div className='pantry-panel-content'>
-                <Space direction='horizontal' wrap style={{ justifyContent: 'center', gap: '25px', marginTop: '20px' }}>
-                    {displayPantryContent(sortProductsById(props.pantry), editing)}
-                </Space>
-            </div>
+                    </div>
+                </>}
             <BackTop>
                 <UpCircleFilled style={{ fontSize: '40px', color: 'rgb(0,21,41)' }} />
             </BackTop>

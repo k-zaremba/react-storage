@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import './SavedList.css'
-import { Input, Space } from 'antd';
-import { Button, Select, Carousel, Spin, Card } from 'antd';
-import { UpCircleFilled, } from '@ant-design/icons';
+import './SavedPublicList.css'
+import {Card } from 'antd';
 
-const { Search } = Input;
-const { Option } = Select;
-//TODO: POWIADAMIANIE KLIENTA O WYCZERPUJACYM SIE ZAPASIE (po liginie np i w spizarce badge )
+// TODO: mechanizm odejmowania z koszyka jak jest w pantry
 
-const SavedList = (props) => {
+const SavedPublicList = (props) => {
 
     const handleClick = () => {
         props.setDrawerInfo(
@@ -24,9 +20,12 @@ const SavedList = (props) => {
         <Card headStyle={{ fontSize: '20px' }} className='saved-list-t' title={props.pair.shoppingList.nameList}
             bordered={true} hoverable
         >
+            <div style={{display : 'flex', justifyContent : 'flex-end', fontWeight : 400}}>
+                autor : {props.pair.shoppingList.client.firstname} {props.pair.shoppingList.client.lastname}
+            </div>
         </Card>
         </div>
     )
 }
 
-export default SavedList
+export default SavedPublicList

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import './SharedPanel.css'
-import { Divider, BackTop, } from 'antd';
-import { Input, Space } from 'antd';
-import { Button, Select, Carousel, Spin, Card } from 'antd';
+import { Button, Select, Carousel, Spin, List, Drawer, Divider, BackTop, Input } from 'antd';
 import { UpCircleFilled, } from '@ant-design/icons';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import cart from '../../../cart';
+import SavedPublicList from './SavedPublicList/SavedPublicList';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -14,8 +14,14 @@ const { Option } = Select;
 const SharedPanel = (props) => {
     const [searchValue, setSearchValue] = useState("")
     const [fetched, setFetched] = useState(false);
+    const [fetched2, setFetched2] = useState(false);
+
     const [loading, setLoading] = useState(true);
     const [templatesFetched, setTemplatesFetched] = useState([]);
+    const [drawerInfo, setDrawerInfo] = useState({})
+    const [visible, setVisible] = useState(false);
+    const [publicListsFetched, setPublicListsFetched] = useState([]);
+
 
     const fetchTemplates = () => {
         setFetched(false)
@@ -33,6 +39,24 @@ const SharedPanel = (props) => {
                 setTemplatesFetched(res)
                 setFetched(true)
                 setLoading(false)
+            })
+    };
+
+    const fetchPublicLists = (withSpinner) => {
+        if (withSpinner) setFetched2(false)
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        };
+        fetch(`http://localhost:8080/storage/shoppinglist/public`, requestOptions)
+            .then(res => res.json())
+            .then((res) => {
+                console.log(res)
+                setPublicListsFetched(res)
+                if (withSpinner) setFetched2(true)
             })
     };
 
@@ -55,18 +79,6 @@ const SharedPanel = (props) => {
         "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/pieczony-krolik.jpg",
         "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/salatka-sledziowa-z-miemniakami-i-zielonym-groszkiem474141.jpg",
     ]
-
-    const displaySavedListsContent = (elems) => {
-        return elems.filter((elem) => {
-            const elemName = elem.product.name.toLowerCase();
-
-            return elemName.includes(searchValue.toLowerCase())
-        }).map((pair) => {
-            return <div>
-
-            </div>
-        })
-    }
 
 
     const renderListContent = (listContent) => {
@@ -126,6 +138,7 @@ const SharedPanel = (props) => {
     useEffect(() => {
         if (loading)
             fetchTemplates();
+            fetchPublicLists(true);
     }, [])
 
     const contentStyle = {
@@ -134,7 +147,81 @@ const SharedPanel = (props) => {
         lineHeight: '160px',
         background: '#364d79',
     };
-    // TODO: zmiana ikon na kliencie
+
+    // TODO: dodawanie z zamowienia do listy
+    //FIXME: 
+
+    function compare(a, b) {
+        if (a.shoppingList.nameList < b.shoppingList.nameList)
+            return -1
+        if (a.shoppingList.nameList > b.shoppingList.nameList)
+            return 1
+        return 0
+    }
+
+    const sortListsByName = (arr) => {
+        return arr.sort(compare)
+    }
+
+    const showDrawer = () => {
+        setVisible(true)
+    };
+
+    const closeDrawer = () => {
+        setVisible(false)
+    };
+
+    const displayPublicListsFiltered = (elems) => {
+        return elems.filter((elem) => {
+            const elemName = elem.shoppingList.nameList.toLowerCase();
+            return elemName.includes(searchValue.toLowerCase())
+        }).map((pair) => {
+            return <SavedPublicList setDrawerInfo={setDrawerInfo} pair={pair} showDrawer={showDrawer} closeDrawer={closeDrawer}></SavedPublicList>
+        })
+    }
+
+    const addPublicListToCart = () => {
+        var content = drawerInfo.content;
+        console.log(content)
+        content.forEach(element => {
+            cart.updateProduct(element.product, element.quantity)
+        });
+        props.forceShoppingListUpdate();
+    }
+
+    const getDrawerContent = () => {
+        var content = drawerInfo.content;
+
+        return (
+            <>
+                <div style={{ fontSize: '25px', textAlign: 'center', width: '100%' }}>{drawerInfo.name}</div>
+                <Divider />
+
+                <InfiniteScroll
+                    dataLength={20}
+                    hasMore={false}
+                    endMessage={<Divider plain style={{ marginTop: '15px' }}>
+                        <Button type={'ghost'} onClick={() => { addPublicListToCart() }} style={{ border: 'none', fontSize: '18px' }}>
+                            DODAJ DO LISTY
+                        </Button>
+                    </Divider>}
+                    scrollableTarget="scrollableDiv"
+                >
+                    <List
+                        dataSource={content}
+                        renderItem={elem => (
+                            <List.Item style={{ padding: '7px', justifyContent: 'space-between' }} key={elem.product.id}>
+                                <img src={elem.product.imgUrl} style={{ width: '23px', height: '23px' }} />
+                                <div style={{ width: '200px', textAlign: 'left', fontSize: '17px' }}>{elem.product.name}</div>
+                                <div style={{ fontSize: '17px' }}>{elem.quantity}</div>
+                            </List.Item>
+                        )}
+                    />
+                </InfiniteScroll>
+            </>
+        );
+
+    }
 
     return (
         <div className="shared-panel">
@@ -188,12 +275,33 @@ const SharedPanel = (props) => {
                         <Search size={'large'} placeholder="Nazwa listy" allowClear value={searchValue} onChange={(e) => { setSearchValue(e.target.value) }} onSearch={(val) => { setSearchValue(val) }} />
                     </div>
 
-                    <div className='shared-panel-content'>
-                        <Space direction='horizontal' wrap style={{ justifyContent: 'center', gap: '25px', marginTop: '20px' }}>
-                            {/*displaySavedListsContent(props.pantry, editing)*/}
-                        </Space>
-                    </div>
+                    {!fetched2 &&
+                        <div className="admin-spinner">
+                            <Spin />
+                        </div>
+                    }
+                    {fetched2 &&
+                        <>
+                            <div className='saved-lists-panel-content'>
+                                {displayPublicListsFiltered(sortListsByName(publicListsFetched))}
+                            </div>
+                        </>
+                    }
 
+
+                    <div className='drawer-wrapper'>
+                        <Drawer
+                            placement="right"
+                            closable={false}
+                            onClose={closeDrawer}
+                            visible={visible}
+                            getContainer={true}
+                            autoFocus={false}
+                            style={{ position: 'absolute', top: `${window.pageYOffset}px` }}
+                        >
+                            {getDrawerContent()}
+                        </Drawer>
+                    </div>
                     <BackTop>
                         <UpCircleFilled style={{ fontSize: '40px', color: 'rgb(0,21,41)' }} />
                     </BackTop>

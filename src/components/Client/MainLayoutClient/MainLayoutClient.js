@@ -11,11 +11,11 @@ import './MainLayoutClient.css'
 import {
     MenuUnfoldOutlined,
     MenuFoldOutlined,
-    ShoppingCartOutlined,
     UnorderedListOutlined,
     FieldTimeOutlined,
     LogoutOutlined,
     ShoppingOutlined,
+    FileOutlined,
     DatabaseOutlined, // spizarnia 
     ReadOutlined, // listy uzytkownikow
     ProfileOutlined // lista zakupowa
@@ -40,9 +40,6 @@ const MainLayoutClient = () => {
     const [collapsed, setCollapsed] = useState(false);
     const [activeWindow, setActiveWindow] = useState(9);
     const [fetched, setFetched] = useState(false);
-    const [storeContentFetched, setStoreContentFetched] = useState([]);
-    const [ordersListFetched, setOrdersListFetched] = useState([]);
-    const [pantryFetched, setPantryFetched] = useState([]);
 
     const navigate = useNavigate()
     const [force, forceUpdate] = useReducer(x => x + 1, 0);
@@ -73,116 +70,21 @@ const MainLayoutClient = () => {
         setCollapsed(!collapsed);
     };
 
-    function compare(a, b) {
-        if (a.order.id < b.order.id)
-            return -1
-        if (a.order.id > b.order.id)
-            return 1
-        return 0
-    }
-
-    const filterOrders = (statusList) => {
-        var content = ordersListFetched.filter((e) => { return statusList.includes(e.order.statusOrder) })
-        return content.sort(compare)
-    }
-
-    const fetchStoreContent = () => {
-        setFetched(false)
-        const requestOptions = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        };
-
-        fetch('http://localhost:8080/storage/products', requestOptions)
-            .then(res => res.json())
-            .then((res) => {
-                console.log(res)
-                setStoreContentFetched(res)
-                setFetched(true)
-            })
-    };
-
-    const fetchUserOrders = () => {
-        var item = sessionStorage.getItem('user')
-        var user = item ? JSON.parse(item) : {}
-
-        setFetched(false)
-        const requestOptions = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        };
-        fetch(`http://localhost:8080/storage/orders/history/${user.client.id}`, requestOptions)
-            .then(res => res.json())
-            .then((res) => {
-                console.log(res)
-                setOrdersListFetched(res)
-                setFetched(true)
-            })
-    };
-
-    const fetchPantry = () => {
-        var item = sessionStorage.getItem('user')
-        var user = item ? JSON.parse(item) : {}
-
-        setFetched(false)
-        const requestOptions = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        };
-        fetch(`http://localhost:8080/storage/pantry/${user.client.id}`, requestOptions)
-            .then(res => res.json())
-            .then((res) => {
-                console.log(res)
-                setPantryFetched(res)
-                setFetched(true)
-            })
+    const refreshView = () => {
+        setFetched(true)
     };
 
     useEffect(() => {
         order.cancelActive()
-
-        if (storeContentFetched === [] || activeWindow === 1){
-            fetchStoreContent();
-        }
-
         if(activeWindow === 9){
-            fetchPantry();
+            refreshView();
         }
-
-        if (activeWindow === 2 || activeWindow === 3)
-            fetchUserOrders();
 
     }, [force])
 
     const getView = () => {
         return (
             <>
-                {false && activeWindow === 1 && <div class="panels">
-
-                    {!fetched &&
-                        <div class="lista" id="content1">
-                            <div className="admin-spinner">
-                                <Spin />
-                            </div>
-                        </div>
-                    }
-
-                    {fetched &&
-                        <div class="lista" id="content1">
-                            <StoreList force={forceStore} forceShoppingList={forceShoppingList} forceStoreUpdate={forceStoreUpdate} forceShoppingListUpdate={forceShoppingListUpdate} content={storeContentFetched}></StoreList>
-                        </div>
-                    }
-                </div>}
-
                 {!fetched &&
                     <div className="admin-spinner">
                         <Spin />
@@ -191,13 +93,13 @@ const MainLayoutClient = () => {
                 }
 
                 {fetched && <div id="client-content-3" class="client-panels"> {/* background height dynamic */}
-                    {activeWindow === 1 && <StoreList force={forceStore} forceShoppingList={forceShoppingList} forceStoreUpdate={forceStoreUpdate} forceShoppingListUpdate={forceShoppingListUpdate} content={storeContentFetched}></StoreList>}
-                    {activeWindow === 2 && <OrdersPanel forceUpdate={forceUpdate} content={filterOrders(['completed', 'placed'])}></OrdersPanel>}
-                    {activeWindow === 3 && <OrdersPanel forceUpdate={forceUpdate} content={filterOrders(['received'])}></OrdersPanel>}
+                    {activeWindow === 1 && <StoreList force={forceStore} forceShoppingList={forceShoppingList} forceStoreUpdate={forceStoreUpdate} forceShoppingListUpdate={forceShoppingListUpdate} ></StoreList>}
+                    {activeWindow === 2 && <OrdersPanel title={'AKTYWNE ZAMÓWIENIA'} forceUpdate={forceUpdate} filters={['completed', 'placed']} ></OrdersPanel>}
+                    {activeWindow === 3 && <OrdersPanel title={'ZAKOŃCZONE ZAMÓWIENIA'} forceUpdate={forceUpdate} filters={['received']} ></OrdersPanel>}
                     {activeWindow === 8 && <CartPanel setActiveWindow={setActiveWindow} force={forceShoppingList} forceStoreUpdate={forceStoreUpdate} forceShoppingListUpdate={forceShoppingListUpdate}></CartPanel>}
-                    {activeWindow === 9 && <PantryPanel forceUpdate={forceUpdate} pantry={pantryFetched} content={storeContentFetched}></PantryPanel>}
+                    {activeWindow === 9 && <PantryPanel forceUpdate={forceUpdate} ></PantryPanel>}
                     {activeWindow === 10 && <SharedPanel forceShoppingListUpdate={forceShoppingListUpdate}></SharedPanel>}
-                    {activeWindow === 11 && <SavedListsPanel></SavedListsPanel>}
+                    {activeWindow === 11 && <SavedListsPanel forceShoppingListUpdate={forceShoppingListUpdate}></SavedListsPanel>}
 
                 </div>}
 
@@ -232,7 +134,7 @@ const MainLayoutClient = () => {
                             Propozycje
                         </Menu.Item>
 
-                        <Menu.Item className="menu-item-selector" key="11" icon={<DatabaseOutlined style={{ fontSize: '20px' }} />} onClick={() => { setActiveWindow(11); forceUpdate() }} >
+                        <Menu.Item className="menu-item-selector" key="11" icon={<FileOutlined style={{ fontSize: '20px' }} />} onClick={() => { setActiveWindow(11); forceUpdate() }} >
                             Twoje listy
                         </Menu.Item>
 

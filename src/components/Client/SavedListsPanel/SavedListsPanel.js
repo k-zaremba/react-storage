@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import './SavedListsPanel.css'
-import { Divider, BackTop } from 'antd';
-import { Input, Space } from 'antd';
-import { Select, Spin, Card, List } from 'antd';
-import { Drawer, Button } from 'antd';
+import { Divider, BackTop, Select, Spin, List, Input, Drawer, Button } from 'antd';
 import { UpCircleFilled, } from '@ant-design/icons';
 import { EditOutlined, DeleteOutlined, CheckOutlined, ShareAltOutlined } from '@ant-design/icons';
 import SavedList from './SavedList/SavedList';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import cart from '../../../cart';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -21,16 +19,16 @@ const SavedListsPanel = (props) => {
     const [visible, setVisible] = useState(false);
     const [editing, setEditing] = useState(false);
     const [drawerInfo, setDrawerInfo] = useState({})
-
+    const [switchButton, setSwitchButton] = useState(false)
     const [newName, setNewName] = useState('')
 
 
 
-    const fetchSavedLists = () => {
+    const fetchSavedLists = (withSpinner) => {
         var item = sessionStorage.getItem('user')
         var user = item ? JSON.parse(item) : {}
 
-        setFetched(false)
+        if (withSpinner) setFetched(false)
         const requestOptions = {
             method: 'GET',
             headers: {
@@ -43,29 +41,76 @@ const SavedListsPanel = (props) => {
             .then((res) => {
                 console.log(res)
                 setSavedListsFetched(res)
-                setFetched(true)
+                if (withSpinner) setFetched(true)
                 setLoading(false)
             })
     };
 
-    const setListStatusShared = (isTrue) => {
-        var url = ''
-        if(isTrue)
-            url = `http://localhost:8080/storage/shoppinglist/share?shoppingListId=${drawerInfo.id}`;
-        else
-            url = `http://localhost:8080/storage/shoppinglist/unshare?shoppingListId=${drawerInfo.id}`;
+    const deleteList = () => {
+        const requestOptions = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        };
+
+        fetch(`http://localhost:8080/storage/shoppinglist/delete?shoppinglistId=${drawerInfo.id}`, requestOptions)
+        .then(res => res.json())
+        .then((res) => {
+                console.log(res) 
+                fetchSavedLists(true);
+                closeDrawer()
+            })
+
+    }
+
+    
+    const changeListName = () => {
+        if(newName === drawerInfo.name) return;
 
         const requestOptions = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json' // TODO: zrobić resfresh
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                nameList : newName // TODO: FIXME: naprawic zmiane nazwy
+              })
+        };
+
+        fetch(`http://localhost:8080/storage/shoppinglist/edit?shoppingListId=${drawerInfo.id}`, requestOptions)
+        .then(res => res.json())
+        .then((res) => {
+                console.log(res)
+                fetchSavedLists(true);
+            })
+    }
+
+    const setListStatusShared = (isTrue) => {
+        var url = ''
+        if (isTrue){
+            url = `http://localhost:8080/storage/shoppinglist/share?shoppingListId=${drawerInfo.id}`;
+            setSwitchButton(true)
+        }
+        else{
+            url = `http://localhost:8080/storage/shoppinglist/unshare?shoppingListId=${drawerInfo.id}`;
+            setSwitchButton(false)
+        }
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json' 
             }
         };
         fetch(url, requestOptions)
             .then(res => res.json())
             .then((res) => {
                 console.log(res)
+                fetchSavedLists(true)
             })
     };
 
@@ -99,8 +144,18 @@ const SavedListsPanel = (props) => {
         setVisible(false)
     };
 
+    const addListToCart = () => {
+        var content = drawerInfo.content;
+        console.log(content)
+        content.forEach(element => {
+            cart.updateProduct(element.product, element.quantity)
+        });
+        props.forceShoppingListUpdate();
+    }
+
     const getDrawerContent = () => {
         var content = drawerInfo.content;
+
         return (
             <>
                 {!editing &&
@@ -109,17 +164,18 @@ const SavedListsPanel = (props) => {
                             <Button onClick={() => { setEditing(!editing) }} style={{ border: 'none', backgroundColor: 'rgba(0,0,0,0)' }}><EditOutlined style={{ fontSize: '18px' }} /></Button>
 
                         </div>
-                        <div style={{ fontSize: '25px', textAlign: 'center', width: '100%' }}>{drawerInfo.name}</div>
+                        <div style={{ fontSize: '25px', textAlign: 'center', width: '100%' }}>{newName}</div>
                     </>
                 }
 
                 {editing &&
                     <>
                         <div style={{ marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <Button onClick={() => { }} type='danger' style={{ border: 'none', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'red', boxShadow: '0 2px 0 rgb(0 0 0 / 2%)' }} icon={<DeleteOutlined style={{ fontSize: 22 }} />} />
-                            <Button onClick={() => { setEditing(!editing) }} style={{ border: 'none', backgroundColor: 'rgba(0,0,0,0)' }}><CheckOutlined style={{ fontSize: '18px' }} /></Button>
+
+                            <Button onClick={() => { deleteList()}} type='danger' style={{ border: 'none', backgroundColor: 'rgba(0, 0, 0, 0)', color: 'red', boxShadow: '0 2px 0 rgb(0 0 0 / 2%)' }} icon={<DeleteOutlined style={{ fontSize: 22 }} />} />
+                            <Button onClick={() => { changeListName(); setEditing(!editing) }} style={{ border: 'none', backgroundColor: 'rgba(0,0,0,0)' }}><CheckOutlined style={{ fontSize: '18px' }} /></Button>
                         </div>
-                        <Input style={{ fontSize: 25, borderBottom: 'solid 1px black' }} size={'middle'} defaultValue={drawerInfo.name} bordered={false} onChange={(v) => { setNewName(v) }}></Input>
+                        <Input style={{ fontSize: 25, borderBottom: 'solid 1px black' }} size={'middle'} defaultValue={newName} bordered={false} onChange={(e) => { setNewName(e.target.value) }}></Input>
 
                     </>
                 }
@@ -130,7 +186,7 @@ const SavedListsPanel = (props) => {
                     dataLength={20}
                     hasMore={false}
                     endMessage={<Divider plain style={{ marginTop: '15px' }}>
-                        <Button type={'ghost'} onClick={() => { }} style={{ border: 'none', fontSize: '18px' }}>
+                        <Button type={'ghost'} onClick={() => {addListToCart()}} style={{ border: 'none', fontSize: '18px' }}>
                             DODAJ DO LISTY
                         </Button>
                     </Divider>}
@@ -149,14 +205,14 @@ const SavedListsPanel = (props) => {
                 </InfiniteScroll>
 
                 <div className='share-button'>
-                    {drawerInfo.status === 'private' &&
-                        <Button onClick={() => {setListStatusShared(true)}} style={{ width: '100%', height: '50px' }} icon={<ShareAltOutlined />}>
+                    {!switchButton &&
+                        <Button onClick={() => { setListStatusShared(true) }} style={{ width: '100%', height: '50px' }} icon={<ShareAltOutlined />}>
                             UDOSTĘPNIJ LISTĘ
                         </Button>}
-                    {drawerInfo.status === 'public' &&
-                        <Button onClick={() => {setListStatusShared(false)}} style={{ width: '100%', height: '50px' }} icon={<ShareAltOutlined />}>
+                    {switchButton &&
+                        <Button onClick={() => { setListStatusShared(false) }} style={{ width: '100%', height: '50px' }} icon={<ShareAltOutlined />}>
                             WYŁĄCZ UDOSTPĘNIENIE
-                        </Button> // TODO: podłączyć udostpenianie i dodawanie produktow do koszyka z listy i usuwanie i edytowanie nazwy
+                        </Button> 
                     }
                 </div>
             </>
@@ -165,9 +221,16 @@ const SavedListsPanel = (props) => {
     }
 
     useEffect(() => {
+        console.log('reg')
         if (loading)
-            fetchSavedLists();
-    }, [])
+            fetchSavedLists(true);
+
+        if(Object.keys(drawerInfo).length !== 0 ){
+            setSwitchButton(drawerInfo.status === 'private' ? false : true);
+            setNewName(drawerInfo.name)
+        }
+
+    }, [drawerInfo])
 
     return (
         <div className="saved-lists-panel">
@@ -184,32 +247,29 @@ const SavedListsPanel = (props) => {
                 </div>
             }
 
+            <div class='search-filter-bar'>
+                <Search size={'large'} placeholder="Nazwa listy" allowClear value={searchValue} onChange={(e) => { setSearchValue(e.target.value) }} onSearch={(val) => { setSearchValue(val) }} />
+            </div>
             {fetched &&
                 <>
-                    <div class='search-filter-bar'>
-                        <Search size={'large'} placeholder="Nazwa listy" allowClear value={searchValue} onChange={(e) => { setSearchValue(e.target.value) }} onSearch={(val) => { setSearchValue(val) }} />
-                    </div>
-
                     <div className='saved-lists-panel-content'>
                         {displaySavedListsFiltered(sortListsByName(savedListsFetched))}
                     </div>
-
-                    <div className='drawer-wrapper'>
-                        <Drawer
-                            placement="right"
-                            closable={false}
-                            onClose={closeDrawer}
-                            visible={visible}
-                            getContainer={true}
-                            autoFocus={false}
-                            style={{ position: 'absolute', top: `${window.pageYOffset}px` }}
-                        >
-                            {getDrawerContent()}
-                        </Drawer>
-                    </div>
                 </>
             }
-
+            <div className='drawer-wrapper'>
+                <Drawer
+                    placement="right"
+                    closable={false}
+                    onClose={closeDrawer}
+                    visible={visible}
+                    getContainer={true}
+                    autoFocus={false}
+                    style={{ position: 'absolute', top: `${window.pageYOffset}px` }}
+                >
+                    {getDrawerContent()}
+                </Drawer>
+            </div>
             <BackTop>
                 <UpCircleFilled style={{ fontSize: '40px', color: 'rgb(0,21,41)' }} />
             </BackTop>
