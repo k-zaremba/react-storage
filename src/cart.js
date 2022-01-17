@@ -47,7 +47,6 @@ class Cart {
     }
 
     clearCart() {
-        message.success(`Lista wyczyszczona`, 2);
         sessionStorage.removeItem("cart");
     }
 

@@ -59,7 +59,8 @@ const CartClick = (props) => {
     }
 
     const clearCart = () => {
-        cart.clearCart(); 
+        cart.clearCart();
+        message.success(`Lista wyczyszczona`, 2);
         props.forceStoreUpdate(); 
         props.forceShoppingListUpdate();
         props.hideCart()
