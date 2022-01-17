@@ -58,6 +58,13 @@ const CartClick = (props) => {
         return value;
     }
 
+    const clearCart = () => {
+        cart.clearCart(); 
+        props.forceStoreUpdate(); 
+        props.forceShoppingListUpdate();
+        props.hideCart()
+    }
+
     const columns = [
         {
             title: 'Produkt',
@@ -76,8 +83,8 @@ const CartClick = (props) => {
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
-                    <Button style={{ border: 'none' }} icon={<MinusOutlined />} onClick={() => { console.log(record); cart.updateProduct(record, -1); props.forceShoppingListUpdate(); props.forceStoreUpdate() }} />
-                    <Button style={{ border: 'none' }} icon={<PlusOutlined />} onClick={() => { console.log(record); cart.updateProduct(record, 1); props.forceShoppingListUpdate(); props.forceStoreUpdate()}} />
+                    <Button style={{ border: 'none' }} icon={<MinusOutlined />} onClick={() => { console.log(record); cart.updateProduct(record, -1); props.forceStoreUpdate(); props.forceShoppingListUpdate() }} />
+                    <Button style={{ border: 'none' }} icon={<PlusOutlined />} onClick={() => { console.log(record); cart.updateProduct(record, 1); props.forceStoreUpdate(); props.forceShoppingListUpdate()}} />
                     <Button type='danger' style={{ border: 'none', background: 'white', color: 'red', boxShadow: '0 2px 0 rgb(0 0 0 / 2%)' }} icon={<CloseOutlined />} onClick={() => { cart.deleteProduct(record); props.forceShoppingListUpdate(); props.forceStoreUpdate()}} />
                 </Space>
             ),
@@ -90,6 +97,9 @@ const CartClick = (props) => {
             {cart.isNotEmpty() &&
                 <>
                     <Table size='small' className='body-body' pagination={false} columns={columns} dataSource={getListProducts()} />
+                    <div style={{display : 'flex', justifyContent : 'flex-end'}}>
+                        <Button onClick={clearCart} danger type="text"> WYCZYŚĆ LISTĘ </Button>
+                        </div>
                     {!spinner && isUserRegular() && <div className='payment-box'>
                         <Tag style={{ fontSize: '15px' }} color="geekblue">-20%</Tag>
                         <div className='payment'>

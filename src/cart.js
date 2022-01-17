@@ -22,9 +22,9 @@ class Cart {
             cart[itemId].quantity = val + quantity;
         }
 
-        if(parseInt(cart[itemId].quantity) == 0){
+        if(parseInt(cart[itemId].quantity) <= 0){
             delete cart[itemId]
-            message.error(`Produkt '${itemInfo.name}' usunięty z koszyka`, 2);
+            message.error(`Produkt '${itemInfo.name}' usunięty z listy`, 2);
         }
         sessionStorage.setItem("cart", JSON.stringify(cart));
     }
@@ -37,7 +37,7 @@ class Cart {
 
         var itemId = itemInfo.id;
         delete cart[itemId]
-        message.error(`Produkt '${itemInfo.name}' usunięty z koszyka`, 2);
+        message.error(`Produkt '${itemInfo.name}' usunięty z listy`, 2);
         
         sessionStorage.setItem("cart", JSON.stringify(cart));
     }
@@ -47,6 +47,7 @@ class Cart {
     }
 
     clearCart() {
+        message.success(`Lista wyczyszczona`, 2);
         sessionStorage.removeItem("cart");
     }
 

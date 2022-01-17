@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './OrdersPanel.css'
-import OrdersList from './OrdersList/OrdersList';
+import Order from './Order/Order';
 import { Divider, BackTop, Spin } from 'antd';
 import { UpCircleFilled } from '@ant-design/icons';
 
@@ -34,7 +34,7 @@ const OrdersPanel = (props) => {
 
     const displayOrdersPanelContent = (elems) => {
         return elems.map((order) => {
-            return <><OrdersList forceUpdate={props.forceUpdate} key={order.order.id} orderInfo={order}></OrdersList><Divider /></>
+            return <><Order forceShoppingListUpdate={props.forceShoppingListUpdate} key={order.order.id} orderInfo={order}></Order><Divider /></>
         })
     }
 

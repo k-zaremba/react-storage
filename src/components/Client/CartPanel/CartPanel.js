@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './CartPanel.css'
-import { Table, Space, Divider, Spin, Tag, Button, BackTop, Popover, Input, Form} from 'antd';
+import { Table, Space, Divider, Spin, Tag, Button, BackTop, Popover, Input, Form } from 'antd';
 import { PlusOutlined, MinusOutlined, CloseOutlined, UpCircleFilled } from '@ant-design/icons';
 
 import cart from '../../../cart';
@@ -8,7 +8,11 @@ import cart from '../../../cart';
 const CartPanel = (props) => {
     const [spinner, setSpinner] = useState(false)
     const [listName, setListName] = useState('Moja lista')
-    
+    const [clicked, setClicked] = useState(false)
+    const [pantryIds, setPantryIds] = useState([])
+
+
+
     var data;
 
     const isUserRegular = () => {
@@ -19,6 +23,36 @@ const CartPanel = (props) => {
             return true;
         else return false;
     }
+
+    const compareWithPantry = () => {
+
+        var item = sessionStorage.getItem('user')
+        var user = item ? JSON.parse(item) : {}
+
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        };
+        fetch(`http://localhost:8080/storage/pantry/${user.client.id}`, requestOptions)
+            .then(res => res.json())
+            .then((res) => {
+                console.log(res)
+                var pantry = res;
+                var ids = []
+                pantry.forEach(e => {
+                    if (cart.contains(e.product)) {
+                        ids.push(e.product.id)
+                        cart.updateProduct(e.product, -e.quantity);
+                        props.forceStoreUpdate()
+                    }
+                });
+                setPantryIds(ids)
+                setClicked(true)
+            })
+    };
 
     const getListProducts = () => {
         var multiplier = 1;
@@ -92,7 +126,7 @@ const CartPanel = (props) => {
     }
 
     const saveList = () => {
-        if(listName === '') return;
+        if (listName === '') return;
 
         var item = sessionStorage.getItem('user')
         var user = item ? JSON.parse(item) : {}
@@ -104,31 +138,30 @@ const CartPanel = (props) => {
         const requestOptions = {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
             body: JSON.stringify({
                 clientId: user.client.id,
                 nameList: listName,
                 productModelList: orderMap,
-              })
-          };
-      
-          fetch('http://localhost:8080/storage/shoppinglist/add', requestOptions)
+            })
+        };
+
+        fetch('http://localhost:8080/storage/shoppinglist/add', requestOptions)
             .then(res => res.json())
             .then((res) => {
-              console.log(res)
+                console.log(res)
             })
 
         setListName('')
     }
 
+    useEffect(() => {
+    }, [])
+
 
     const displayListAdditionForm = () => {
-    
-        // userId
-        // nazwa listy
-        // produkty
         return (
             <div style={{ display: 'flex' }}>
                 <Input style={{ width: '300px' }} placeholder='Nazwa listy' value={listName} maxLength={100} onChange={(e) => { setListName(e.target.value); }}></Input>
@@ -136,6 +169,8 @@ const CartPanel = (props) => {
             </div>
         )
     }
+
+
 
     const columns = [
         {
@@ -148,27 +183,26 @@ const CartPanel = (props) => {
             title: 'Ilość',
             dataIndex: 'count',
             key: 'count',
-            render: val => <p style={{ fontSize: '22px', margin: 'auto' }}>{val}</p>,
+            render: (val, record) => <p style={{ fontSize: '22px', margin: 'auto', fontWeight : `${pantryIds.includes(parseInt(record.id)) ? 500 : 400}`,  color : `${pantryIds.includes(parseInt(record.id)) ? '#1fc700' : 'black'}` }}>{val}</p>,
         },
         {
             title: 'Cena',
             dataIndex: 'value',
             key: 'value',
-            render: val => <p style={{ fontSize: '22px', margin: 'auto' }}>{val.toFixed(2)} zł</p>,
+            render: (val, record) => <p style={{ fontSize: '22px', margin: 'auto', color : `${pantryIds.includes(parseInt(record.id)) ? '#1fc700' : 'black'}` }}>{val.toFixed(2)} zł</p>,
         },
         {
             title: 'Edycja',
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
-                    <Button style={{ border: 'none' }} icon={<MinusOutlined />} onClick={() => { console.log(record); cart.updateProduct(record, -1); props.forceShoppingListUpdate(); props.forceStoreUpdate() }} />
-                    <Button style={{ border: 'none' }} icon={<PlusOutlined />} onClick={() => { console.log(record); cart.updateProduct(record, 1); props.forceShoppingListUpdate(); props.forceStoreUpdate() }} />
-                    <Button type='danger' style={{ border: 'none', background: 'white', color: 'red', boxShadow: '0 2px 0 rgb(0 0 0 / 2%)' }} icon={<CloseOutlined />} onClick={() => { cart.deleteProduct(record); props.forceShoppingListUpdate(); props.forceStoreUpdate() }} />
+                    <Button style={{ border: 'none' }} icon={<MinusOutlined />} onClick={() => { console.log(record); cart.updateProduct(record, -1); props.forceStoreUpdate() }} />
+                    <Button style={{ border: 'none' }} icon={<PlusOutlined />} onClick={() => { console.log(record); cart.updateProduct(record, 1); props.forceStoreUpdate() }} />
+                    <Button type='danger' style={{ border: 'none', background: 'white', color: 'red', boxShadow: '0 2px 0 rgb(0 0 0 / 2%)' }} icon={<CloseOutlined />} onClick={() => { cart.deleteProduct(record); props.forceStoreUpdate() }} />
                 </Space>
             ),
         },
     ];
-
 
     return (
         <div className='payment-panel-client'>
@@ -179,21 +213,26 @@ const CartPanel = (props) => {
             <div className='cart-payment-summary'>
                 {cart.isNotEmpty() &&
                     <>
-                        <Table pagination={false} columns={columns} dataSource={getListProducts()} />
+                        <Table pagination={false} columns={columns} dataSource={getListProducts()}  />
+
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
 
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <Popover
-                                content={displayListAdditionForm()}
-                                title="Title"
-                                trigger="click"
-                                placement="bottomLeft"
-                            >
-                                <Button type="primary" shape="default" size={'large'} type={'ghost'} onClick={() => { }} style={{ border: 'none', fontSize: '23px', fontWeight: '100', boxShadow: 'none' }}>
-                                    ZAPISZ LISTĘ
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <Popover
+                                    content={displayListAdditionForm()}
+                                    title="Title"
+                                    trigger="click"
+                                    placement="bottomLeft"
+                                >
+                                    <Button type="primary" shape="default" size={'large'} type={'ghost'} style={{ padding: '0px 15px', border: 'none', fontSize: '23px', fontWeight: '100', boxShadow: 'none' }}>
+                                        ZAPISZ LISTĘ
+                                    </Button>
+                                </Popover>
+                                <Divider style={{ height: '30px' }} type={'vertical'} />
+                                <Button type="primary" shape="default" size={'large'} type={'ghost'} disabled={clicked} onClick={() => { compareWithPantry(); }} style={{ padding: '0px 15px', border: 'none', fontSize: '23px', fontWeight: '100', boxShadow: 'none' }}>
+                                    ODEJMIJ PRODUKTY ZE SPIŻARNI
                                 </Button>
-                            </Popover>
-                        </div>
+                            </div>
 
                             {!spinner && isUserRegular() && <div className='payment-box-summary'>
                                 <div className='payment'>

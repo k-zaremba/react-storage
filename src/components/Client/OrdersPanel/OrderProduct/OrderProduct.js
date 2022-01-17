@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
-import './OrderItem.css'
+import React from 'react'
+import './OrderProduct.css'
 import { Divider } from 'antd';
 
-const OrderItem = (props) =>{
+const OrderProduct = (props) =>{
 
     return (
         <>
@@ -15,4 +15,4 @@ const OrderItem = (props) =>{
     )
 }
 
-export default OrderItem
+export default OrderProduct

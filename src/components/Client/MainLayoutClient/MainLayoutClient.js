@@ -94,8 +94,8 @@ const MainLayoutClient = () => {
 
                 {fetched && <div id="client-content-3" class="client-panels"> {/* background height dynamic */}
                     {activeWindow === 1 && <StoreList force={forceStore} forceShoppingList={forceShoppingList} forceStoreUpdate={forceStoreUpdate} forceShoppingListUpdate={forceShoppingListUpdate} ></StoreList>}
-                    {activeWindow === 2 && <OrdersPanel title={'AKTYWNE ZAMÓWIENIA'} forceUpdate={forceUpdate} filters={['completed', 'placed']} ></OrdersPanel>}
-                    {activeWindow === 3 && <OrdersPanel title={'ZAKOŃCZONE ZAMÓWIENIA'} forceUpdate={forceUpdate} filters={['received']} ></OrdersPanel>}
+                    {activeWindow === 2 && <OrdersPanel title={'AKTYWNE ZAMÓWIENIA'} forceShoppingListUpdate={forceShoppingListUpdate} filters={['completed', 'placed']} ></OrdersPanel>}
+                    {activeWindow === 3 && <OrdersPanel title={'ZAKOŃCZONE ZAMÓWIENIA'} forceShoppingListUpdate={forceShoppingListUpdate} filters={['received']} ></OrdersPanel>}
                     {activeWindow === 8 && <CartPanel setActiveWindow={setActiveWindow} force={forceShoppingList} forceStoreUpdate={forceStoreUpdate} forceShoppingListUpdate={forceShoppingListUpdate}></CartPanel>}
                     {activeWindow === 9 && <PantryPanel forceUpdate={forceUpdate} ></PantryPanel>}
                     {activeWindow === 10 && <SharedPanel forceShoppingListUpdate={forceShoppingListUpdate}></SharedPanel>}

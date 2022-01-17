@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react'
 import './SavedList.css'
 import { Card } from 'antd';
 
-//TODO: POWIADAMIANIE KLIENTA O WYCZERPUJACYM SIE ZAPASIE (po liginie np i w spizarce badge )
-
 const SavedList = (props) => {
 
     const handleClick = () => {

@@ -148,9 +148,6 @@ const SharedPanel = (props) => {
         background: '#364d79',
     };
 
-    // TODO: dodawanie z zamowienia do listy
-    //FIXME: 
-
     function compare(a, b) {
         if (a.shoppingList.nameList < b.shoppingList.nameList)
             return -1

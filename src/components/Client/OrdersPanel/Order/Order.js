@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
-import './OrdersList.css'
+import './Order.css'
 import { ShoppingOutlined } from '@ant-design/icons';
 import { Collapse } from 'antd';
-import { PageHeader, Tag, Button, Statistic, Descriptions, Row, Popover } from 'antd';
-import OrderItem from '../OrderItem/OrderItem';
+import { PageHeader, Tag, Button, Statistic, Divider, Row, Popover } from 'antd';
+import OrderProduct from '../OrderProduct/OrderProduct';
+import cart from '../../../../cart';
 const { Panel } = Collapse;
 
 
-const OrdersList = (props) => {
+const Order = (props) => {
 
     const getDefaultOrderStatus = (status) => {
         if (status === 'placed')
@@ -49,10 +50,24 @@ const OrdersList = (props) => {
 
     }
 
-    const displayOrders = (elems) => {
-        return elems.map((e) => {
-            return <OrderItem forceUpdate={props.forceUpdate} key={e.product.id} itemInfo={e}></OrderItem>
-        })
+    const addToList = (elems) => {
+        elems.forEach(element => {
+            cart.updateProduct(element.product, element.quantity)
+        });
+        props.forceShoppingListUpdate();
+    } 
+
+    const displayOrderProducts = (elems) => {
+        return <>
+        {elems.map((e) => {
+            return <OrderProduct key={e.product.id} itemInfo={e}></OrderProduct>
+        })}
+            <Divider plain style={{ marginTop: '15px' }}>
+                <Button type={'ghost'} onClick={() => addToList(elems)} style={{ border: 'none', fontSize: '18px' }}>
+                    DODAJ DO LISTY
+                </Button>
+            </Divider>
+        </>
     }
 
     return (
@@ -74,7 +89,7 @@ const OrdersList = (props) => {
                         }}
                     />
                     <Statistic title="Status płatności" value={getPaymentOrderStatus(props.orderInfo.order.statusPayment)} />
-                    <Popover placement="right"  content={displayOrders(props.orderInfo.productList)}>
+                    <Popover placement="right"  content={displayOrderProducts(props.orderInfo.productList)}>
                         <Button style ={{marginBottom: 'auto', marginLeft : '60px'}} type='text'>Zamówione produkty</Button>
                     </Popover>
                 </Row>
@@ -85,4 +100,4 @@ const OrdersList = (props) => {
     )
 }
 
-export default OrdersList
+export default Order

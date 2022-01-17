@@ -48,6 +48,7 @@ const PantryPanel = (props) => {
             .then(res => res.json())
             .then((res) => {
                 console.log(res)
+                fetchPantry()
             })
     }
 
@@ -110,7 +111,7 @@ const PantryPanel = (props) => {
     const getProdId = (itemName) => {
         if (itemName == '') return -1;
 
-        var content = props.content;
+        var content = storeContentFetched;
         var idx = content.findIndex(i => i.name === itemName);
         return content[idx].id
     }
