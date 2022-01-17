@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './PantryPanel.css'
-import { Button, InputNumber, Select, Spin, Input, Space, Divider, BackTop  } from 'antd';
+import { Button, InputNumber, Select, Spin, Input, Space, Divider, BackTop, message  } from 'antd';
 import { UpCircleFilled, } from '@ant-design/icons';
 import PantryItem from './PantryItem/PantryItem';
 
@@ -21,6 +21,9 @@ const PantryPanel = (props) => {
     const [storeContentFetched, setStoreContentFetched] = useState([]);
     const [fetched2, setFetched2] = useState(false);
     const [loading2, setLoading2] = useState(true);
+
+    const [showMessage, setShowMessage] = useState(true);
+    
 
     const addToPantry = (itemId, quantity) => {
         if (quantity == 0) return;
@@ -144,11 +147,23 @@ const PantryPanel = (props) => {
     }
 
     useEffect(() => {
-        if (loading)
+        if (loading){
             fetchPantry();
+        }
+
+        if(showMessage && pantryFetched.length !== 0){
+            var content = pantryFetched;
+            var idx = content.findIndex(i => i.quantity <= 2);
+            if(idx !== -1){
+                message.warning('Część twoich zapasów niedługo się wyczerpie');
+            }
+
+            setShowMessage(false)
+        }
+
         if (loading2)
             fetchStoreContent()
-    }, [])
+    }, [pantryFetched])
 
     return (
         <div className="pantry-panel">
@@ -194,7 +209,7 @@ const PantryPanel = (props) => {
                                 </Button>
 
                                 {editing &&
-                                    <Button type="primary" shape="default" size={'large'} onClick={() => { setEditing(!editing) }}>
+                                    <Button type="primary" shape="default" size={'large'} onClick={() => { setEditing(!editing); fetchPantry() }}>
                                         ZATWIERDŹ
                                     </Button>}
                             </Space>

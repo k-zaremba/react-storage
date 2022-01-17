@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './PantryItem.css'
-import { Divider, BackTop } from 'antd';
-import { PageHeader, Statistic, Row, Input, Space } from 'antd';
-import { Button, InputNumber, Select } from 'antd';
+import { Button, InputNumber, Divider, PageHeader, Row, Badge } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 
 import { EditOutlined, CheckOutlined } from '@ant-design/icons';
@@ -55,6 +53,8 @@ const PantryItem = (props) => {
                     <Button onClick={() => { setEditing(!editing) }} style={{ border: 'none', backgroundColor: 'rgba(0, 0, 0, 0)' }}><EditOutlined style={{ fontSize: 22 }} /></Button>
                 </div>}
 
+            {dummyValue <= 2 && 
+            <Badge.Ribbon placement='start' text="Mała ilość w spiżarni!" color="#e3a977">
             <PageHeader style={{ width: '500px' }}
             >
 
@@ -74,6 +74,28 @@ const PantryItem = (props) => {
                 </Row>
                 <Divider />
             </PageHeader>
+            </Badge.Ribbon>}
+
+            {dummyValue > 2 &&
+            <PageHeader style={{ width: '500px' }}
+            >
+
+                <Row style={{ justifyContent: 'space-evenly' }}>
+                    <img src={props.pair.product.imgUrl} width='140px' height='120px' />
+
+                    <div style={{ margin: '0 10px' }}>
+                        <p style={{ marginBottom: 4, color: 'rgba(0,0,0,0.45)', fontSize: '14px' }}> Nazwa produktu </p>
+                        <p style={{ marginBottom: 0, color: 'rgba(0,0,0,0.85)', fontSize: '24px' }}> {props.pair.product.name} </p>
+                        <p style={{ marginBottom: 4, color: 'rgba(0,0,0,0.45)', fontSize: '14px' }}> Ilość w spiżarni </p>
+
+
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <p style={{ marginBottom: 0, color: 'rgba(0,0,0,0.85)', fontSize: '24px', padding: '0px 11px' }}> {dummyValue} </p>
+                        </div>
+                    </div>
+                </Row>
+                <Divider />
+            </PageHeader>}
 
         </div>}
 
