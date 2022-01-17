@@ -142,7 +142,10 @@ const SavedListsPanel = (props) => {
 
     const closeDrawer = () => {
         setVisible(false)
+        setEditing(false)
     };
+
+    //TODO: ewentualny drugi drawer z zawartoscia koszyka
 
     const addListToCart = () => {
         var content = drawerInfo.content;
@@ -180,9 +183,9 @@ const SavedListsPanel = (props) => {
                     </>
                 }
 
-                <Divider />
+                <Divider /> 
 
-                <InfiniteScroll
+                <InfiniteScroll style={{marginBottom : '65px'}}
                     dataLength={20}
                     hasMore={false}
                     endMessage={<Divider plain style={{ marginTop: '15px' }}>

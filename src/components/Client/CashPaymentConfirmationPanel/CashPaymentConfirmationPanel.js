@@ -16,8 +16,8 @@ const CashPaymentConfirmationPanel = (props) => {
     const redirect = () => {
         if (time === 0) {
             setTimeout(function () {
-                props.setActiveWindow(9);
-            }, 300);
+                props.setActiveWindow(1);
+            }, 300); //TODO: zrobic zeby udostpenione listy byly wszystkich tylko nie zalogowanego uzytkownika 
         }
     }
 
@@ -50,7 +50,7 @@ const CashPaymentConfirmationPanel = (props) => {
                 extra={[
                     <Button type="primary" size='large' key="console" onClick={() => {
                         setTimeout(function () {
-                            props.setActiveWindow(9);
+                            props.setActiveWindow(1);
                         }, 300);
                     }}>
                         Wróć do sklepu

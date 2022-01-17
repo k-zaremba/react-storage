@@ -76,6 +76,7 @@ const CartClick = (props) => {
             title: 'Ilość',
             dataIndex: 'count',
             key: 'count',
+            width: 70,
             render: val => <p style={{ fontSize: '16px', margin: 'auto' }}>{val}</p>,
         },
         {
@@ -96,7 +97,14 @@ const CartClick = (props) => {
         <div>
             {cart.isNotEmpty() &&
                 <>
-                    <Table size='small' className='body-body' pagination={false} columns={columns} dataSource={getListProducts()} />
+                    <Table size='small' 
+                    className='body-body' 
+                    pagination={false} 
+                    columns={columns} 
+                    scroll={{ y: 500 }}
+                    style={{width : '400px'}}
+                    dataSource={getListProducts()} 
+                    />
                     <div style={{display : 'flex', justifyContent : 'flex-end'}}>
                         <Button onClick={clearCart} danger type="text"> WYCZYŚĆ LISTĘ </Button>
                         </div>
