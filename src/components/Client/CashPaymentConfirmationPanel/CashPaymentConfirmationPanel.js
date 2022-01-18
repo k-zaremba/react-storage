@@ -17,7 +17,7 @@ const CashPaymentConfirmationPanel = (props) => {
         if (time === 0) {
             setTimeout(function () {
                 props.setActiveWindow(1);
-            }, 300); //TODO: zrobic zeby udostpenione listy byly wszystkich tylko nie zalogowanego uzytkownika 
+            }, 300);
         }
     }
 

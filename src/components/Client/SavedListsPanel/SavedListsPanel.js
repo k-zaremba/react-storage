@@ -75,9 +75,7 @@ const SavedListsPanel = (props) => {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            body: JSON.stringify({
-                nameList : newName // TODO: FIXME: naprawic zmiane nazwy
-              })
+            body: newName
         };
 
         fetch(`http://localhost:8080/storage/shoppinglist/edit?shoppingListId=${drawerInfo.id}`, requestOptions)
