@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import './StoreList.css'
 import StoreItem from './StoreItem/StoreItem';
 import { Space, Input, BackTop, Divider, Spin } from 'antd';
@@ -74,10 +74,14 @@ const StoreList = (props) => {
                     <Spin />
                 </div>
             }
-            {fetched && 
-            <Space direction='horizontal' wrap style={{ justifyContent : 'center', gap: '25px', marginTop: '20px' }}>
-                {displayShopContentFiltered(sortProductsById(storeContentFetched))}
-            </Space>}
+
+            {fetched &&
+                <div style={{ display: 'flex', flexWrap: 'wrap', marginLeft: '95px', columnGap : '9px' }}>
+                    {displayShopContentFiltered(sortProductsById(storeContentFetched))}
+                </div>
+
+            }
+            
             <BackTop>
                 <UpCircleFilled style={{ fontSize: '40px', color: 'rgb(0,21,41)' }} />
             </BackTop>

@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react'
 import './SavedPublicList.css'
 import {Card } from 'antd';
 
-// TODO: mechanizm odejmowania z koszyka jak jest w pantry
-
 const SavedPublicList = (props) => {
 
     const handleClick = () => {

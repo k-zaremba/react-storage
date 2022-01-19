@@ -19,7 +19,7 @@ const CartClick = (props) => {
         else return false;
     }
 
-    const getListProducts = () => {
+    const getListProducts = () => { 
         var multiplier = 1;
 
         if (isUserRegular())

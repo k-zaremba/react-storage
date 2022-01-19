@@ -231,9 +231,9 @@ const PantryPanel = (props) => {
                         <Search size={'large'} placeholder="Nazwa produktu" allowClear value={searchValue} onChange={(e) => { setSearchValue(e.target.value) }} onSearch={(val) => { setSearchValue(val) }} />
                     </div>
                     <div className='pantry-panel-content'>
-                        <Space direction='horizontal' wrap style={{ justifyContent: 'center', gap: '25px', marginTop: '20px' }}>
+                        <div style={{display : 'flex', flexWrap : 'wrap', marginLeft : '25px', columnGap : '10px'}}>
                             {displayPantryContent(sortProductsById(pantryFetched), editing)}
-                        </Space>
+                        </div>
                     </div>
                 </>}
             <BackTop>
