@@ -88,11 +88,6 @@ const RegisterPanel = (props) => {
     setSuccessful(false);
     requestRegistration(values);
   };
-  // TODO: kolor buttona
-  /*
-  <Button type="primary" style={{ background: "red", borderColor: "yellow" }}>
-  Submit
-</Button>;*/
 
   return (
     <>

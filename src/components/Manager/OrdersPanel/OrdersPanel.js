@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './OrdersPanel.css'
 import { BackTop, Table, Tag, Popover, Button, Divider, Card, Spin } from 'antd';
 import { UpCircleFilled, PieChartOutlined } from '@ant-design/icons';
@@ -8,12 +8,20 @@ const OrdersPanel = (props) => {
     const [spinner, setSpinner] = useState(false)
     const [buttonBlock, setButtonBlock] = useState(true)
 
+    const [statsFetched, setStatsFetched] = useState([]);
+    const [fetched, setFetched] = useState(false);
+    const [loading, setLoading] = useState(true);
+
+    const [ordersHistoryFetched, setOrdersHistoryFetched] = useState([]);
+    const [fetched2, setFetched2] = useState(false);
+    const [loading2, setLoading2] = useState(true);
+
     var data;
     var statisticsData;
 
     const getData = () => {
 
-        var orderHistory = props.content;
+        var orderHistory = ordersHistoryFetched;
         data = [];
 
         orderHistory.forEach((e) => {
@@ -35,10 +43,52 @@ const OrdersPanel = (props) => {
         return data;
     }
 
-    
+
+    const fetchStatistics = () => {
+        setFetched(false)
+
+        const requestOptions1 = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        };
+
+        fetch('http://localhost:8080/storage/statistics', requestOptions1)
+            .then(res => res.json())
+            .then((res) => {
+                console.log(res)
+                setStatsFetched(res)
+                setFetched(true)
+                setLoading(false)
+            })
+    }
+
+    const fetchOrdersHistory = () => {
+        setFetched2(false)
+        const requestOptions2 = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        };
+
+        fetch('http://localhost:8080/storage/order/list', requestOptions2)
+            .then(res => res.json())
+            .then((res) => {
+                console.log(res)
+                setOrdersHistoryFetched(res)
+                setFetched2(true)
+                setLoading2(false)
+            })
+    };
+
+
     const getStatsData = () => {
 
-        var statistics = props.stats.productListModel;
+        var statistics = statsFetched.productModel;
         statisticsData = [];
 
         statistics.forEach((i) => {
@@ -61,11 +111,11 @@ const OrdersPanel = (props) => {
         setSpinner(true)
         setButtonBlock(false)
         setTimeout(() => {
-          setSpinner(false);
+            setSpinner(false);
         }
-          , 2000);
-      };
-    
+            , 2000);
+    };
+
     function compareId(a, b) {
         if (a.idZ < b.idZ)
             return -1
@@ -77,7 +127,7 @@ const OrdersPanel = (props) => {
     const sortOrdersById = (arr) => {
         return arr.sort(compareId)
     }
-        
+
     function compareScore(a, b) {
         if (a.score > b.score)
             return -1
@@ -131,6 +181,16 @@ const OrdersPanel = (props) => {
         })
     }
 
+    useEffect(() => {
+        if (loading) {
+            fetchStatistics();
+        }
+        if (loading2)
+            fetchOrdersHistory()
+
+    }, [])
+
+
     const columns = [
         {
             title: 'Nr zamówienia',
@@ -150,7 +210,7 @@ const OrdersPanel = (props) => {
             sorter: {
                 compare: (a, b) => String(b.date).localeCompare(String(a.date)),
                 multiple: 1,
-              },
+            },
         },
         {
             title: 'Imię',
@@ -286,8 +346,15 @@ const OrdersPanel = (props) => {
             </div>
             <Divider />
 
+
             <div style={{ height: '770px' }}>
-                <Table pagination columns={columns} dataSource={getData()} />
+                {!fetched2 &&
+                    <div className="admin-spinner">
+                        <Spin />
+                    </div>
+                }
+                {fetched2 &&
+                    <Table pagination columns={columns} dataSource={getData()} />}
             </div>
             <Divider />
 
@@ -305,8 +372,8 @@ const OrdersPanel = (props) => {
             </div>}
 
             {spinner &&
-                <div style={{width : '205px', margin : 'auto', textAlign : 'center', marginTop: '100px'}}>
-                  <Spin />
+                <div style={{ width: '205px', margin: 'auto', textAlign: 'center', marginTop: '100px' }}>
+                    <Spin />
                 </div>
             }
 
@@ -315,8 +382,9 @@ const OrdersPanel = (props) => {
                     <div className='manager-stats-info-entering-title'>
                         STATYSTYKI PRODUKTÓW
                     </div>
-                    <Divider/>
+                    <Divider />
                     <Table style={{ marginTop: 56 }} pagination columns={statisticsColumns} dataSource={getStatsData()} />
+                    <div style={{fontSize : '25px'}}>Ilość zamówień złożonych do sklepu: {statsFetched.quantityOrder}</div>
                 </div>}
             <BackTop>
                 <UpCircleFilled style={{ fontSize: '40px', color: 'rgb(0,21,41)' }} />

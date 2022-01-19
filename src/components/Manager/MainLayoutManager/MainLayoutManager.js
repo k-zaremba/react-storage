@@ -26,8 +26,7 @@ const MainLayoutManager = () => {
     const [activeWindow, setActiveWindow] = useState(1);
 
     const [storeContentFetched, setStoreContentFetched] = useState([]);
-    const [ordersHistoryFetched, setOrdersHistoryFetched] = useState([]);
-    const [statsFetched, setStatsFetched] = useState([]);
+
 
 
     const [fetched, setFetched] = useState(false);
@@ -58,41 +57,6 @@ const MainLayoutManager = () => {
             })
     };
 
-    const fetchOrdersHistory = () => {
-        setFetched(false)
-
-        const requestOptions1 = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        };
-
-        fetch('http://localhost:8080/storage/statistics', requestOptions1) //TODO: naprawic ten syf bo sie nie fethchuje do OrderPanel
-            .then(res => res.json())
-            .then((res) => {
-                console.log(res)
-                setStatsFetched(res)
-            })
-
-        const requestOptions2 = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        };
-
-        fetch('http://localhost:8080/storage/order/list', requestOptions2)
-            .then(res => res.json())
-            .then((res) => {
-                console.log(res)
-                setOrdersHistoryFetched(res)
-                setFetched(true)
-            })
-    };
-
 
     const getView = () => {
 
@@ -108,7 +72,7 @@ const MainLayoutManager = () => {
             <div class="manager-panels">
                 { activeWindow !== 3 && <div class="manager-content-list" id="manager-content-1">
                     {activeWindow === 1 && <StoreList forceUpdate={forceUpdate} content={storeContentFetched}></StoreList>}
-                    {activeWindow === 2 && <OrdersPanel forceUpdate={forceUpdate} content={ordersHistoryFetched} stats={statsFetched}></OrdersPanel>}
+                    {activeWindow === 2 && <OrdersPanel forceUpdate={forceUpdate}></OrdersPanel>}
                 </div> }
 
                 <div class="manager-content-list" id="manager-content-2">
@@ -121,10 +85,7 @@ const MainLayoutManager = () => {
     useEffect(() => {
         if (activeWindow === 1)
             fetchStoreContent();
-        if (activeWindow === 2){
-            fetchOrdersHistory();
-            //fetchStats();
-        }
+
     }, [force])
 
     const logoutAccount = () => {

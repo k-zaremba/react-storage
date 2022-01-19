@@ -143,8 +143,6 @@ const SavedListsPanel = (props) => {
         setEditing(false)
     };
 
-    //TODO: ewentualny drugi drawer z zawartoscia koszyka
-
     const addListToCart = () => {
         var content = drawerInfo.content;
         console.log(content)
