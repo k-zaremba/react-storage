@@ -62,7 +62,7 @@ const SavedListsPanel = (props) => {
                 fetchSavedLists(true);
                 closeDrawer()
             })
-
+            
     }
 
     

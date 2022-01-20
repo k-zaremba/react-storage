@@ -43,7 +43,6 @@ const OrdersPanel = (props) => {
         return data;
     }
 
-
     const fetchStatistics = () => {
         setFetched(false)
 

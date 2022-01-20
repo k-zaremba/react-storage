@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react'
-import { Layout, Menu, Spin, Popover, Button, Badge } from 'antd';
+import { Layout, Menu, Spin, Popover, Badge } from 'antd';
 import StoreList from '../StoreList/StoreList'
 import OrdersPanel from '../OrdersPanel/OrdersPanel';
 import PantryPanel from '../PatryPanel/PantryPanel'
@@ -16,9 +16,8 @@ import {
     LogoutOutlined,
     ShoppingOutlined,
     FileOutlined,
-    DatabaseOutlined, // spizarnia 
-    ReadOutlined, // listy uzytkownikow
-    ProfileOutlined // lista zakupowa
+    DatabaseOutlined, 
+    ReadOutlined, 
 } from '@ant-design/icons';
 import PaymentPanel from '../PaymentPanel/PaymentPanel';
 import CardPaymentPanel from '../CardPaymentPanel/CardPaymentPanel';
@@ -178,14 +177,14 @@ const MainLayoutClient = () => {
                                         <a onClick={hide}>Zamknij</a>
                                     </div>
                                 }
-                                title="Twój koszyk"
+                                title="Twoj lista"
                                 trigger="click"
                                 visible={clicked}
                                 onVisibleChange={handleClickChange}
                                 placement="bottomRight"
                             >
                                 <Badge count={cart.getListProductsAmount()} overflowCount={99} style={{marginTop : 45, marginRight : 25}}>
-                                    <ProfileOutlined style={{ fontSize: 40 }} className='trigger' />
+                                    <ShoppingCartOutlined style={{ fontSize: 40 }} className='trigger' />
                                 </Badge>
                             </Popover>
                         </Popover>
